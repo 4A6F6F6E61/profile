@@ -1,7 +1,28 @@
-import 'package:flutter/material.dart';
+import 'package:fluent_ui/fluent_ui.dart';
+import 'package:bitsdojo_window/bitsdojo_window.dart';
+import 'package:flutter_acrylic/flutter_acrylic.dart';
+import 'dart:io';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Window.initialize();
+  await Window.setEffect(
+    effect: WindowEffect.mica,
+    color: Colors.transparent,
+  );
+  if (Platform.isWindows) {
+    await Window.hideWindowControls();
+  }
   runApp(const MyApp());
+  if (Platform.isWindows) {
+    doWhenWindowReady(() {
+      appWindow
+        ..minSize = const Size(500, 155)
+        ..size = const Size(700, 170)
+        ..alignment = Alignment.bottomCenter
+        ..show();
+    });
+  }
 }
 
 class MyApp extends StatelessWidget {
@@ -10,27 +31,15 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const FluentApp(
       title: 'Flutter Demo',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
-        primarySwatch: Colors.blue,
-      ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: MyHomePage(),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
+  const MyHomePage({Key? key}) : super(key: key);
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -41,75 +50,185 @@ class MyHomePage extends StatefulWidget {
   // used by the build method of the State. Fields in a Widget subclass are
   // always marked "final".
 
-  final String title;
-
   @override
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+enum InterfaceBrightness {
+  light,
+  dark,
+  auto,
+}
 
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
+extension InterfaceBrightnessExtension on InterfaceBrightness {
+  bool getIsDark(BuildContext? context) {
+    if (this == InterfaceBrightness.light) return false;
+    if (this == InterfaceBrightness.auto) {
+      if (context == null) return true;
+      return MediaQuery.of(context).platformBrightness == Brightness.dark;
+    }
+
+    return true;
   }
+
+  Color getForegroundColor(BuildContext? context) {
+    return getIsDark(context) ? Colors.white : Colors.black;
+  }
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+  InterfaceBrightness brightness =
+      Platform.isMacOS ? InterfaceBrightness.auto : InterfaceBrightness.dark;
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Column(
+        children: [
+          WindowTitleBar(
+            brightness: brightness,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Column(
+                children: [
+                  IconButton(
+                    icon: const Icon(FluentIcons.cat,
+                        size: 80, color: Colors.white),
+                    onPressed: () => openFirefox(
+                        "C:/Program Files/Mozilla Firefox/firefox.exe",
+                        ["-p", "Entertainment"]),
+                  ),
+                  const Text("Entertainment",
+                      style: TextStyle(fontSize: 16, color: Colors.white)),
+                ],
+              ),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  IconButton(
+                    icon: const Icon(FluentIcons.authenticator_app,
+                        size: 80, color: Colors.white),
+                    onPressed: () => openFirefox(
+                        "C:/Program Files/Mozilla Firefox/firefox.exe",
+                        ["-p", "Homework"]),
+                  ),
+                  const Text("Homework",
+                      style: TextStyle(fontSize: 16, color: Colors.white)),
+                ],
+              ),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  IconButton(
+                    icon: const Icon(FluentIcons.developer_tools,
+                        size: 80, color: Colors.white),
+                    onPressed: () => openFirefox(
+                        "C:/Program Files/Firefox Developer Edition/firefox.exe",
+                        ["-p", "dev-edition-default"]),
+                  ),
+                  const Text("Dev",
+                      style: TextStyle(fontSize: 16, color: Colors.white)),
+                ],
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  void openFirefox(String exe, List<String> args) async {
+    await Process.run(exe, args);
+    exit(0);
+  }
+}
+
+class WindowTitleBar extends StatelessWidget {
+  final InterfaceBrightness brightness;
+  const WindowTitleBar({Key? key, required this.brightness}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
-    return Scaffold(
-      appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Invoke "debug painting" (press "p" in the console, choose the
-          // "Toggle Debug Paint" action from the Flutter Inspector in Android
-          // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-          // to see the wireframe for each widget.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
+    return Platform.isWindows
+        ? Container(
+            width: MediaQuery.of(context).size.width,
+            height: 32.0,
+            color: Colors.transparent,
+            child: MoveWindow(
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Expanded(
+                    child: Container(),
+                  ),
+                  MinimizeWindowButton(
+                    colors: WindowButtonColors(
+                      iconNormal: brightness == InterfaceBrightness.light
+                          ? Colors.black
+                          : Colors.white,
+                      iconMouseDown: brightness == InterfaceBrightness.light
+                          ? Colors.black
+                          : Colors.white,
+                      iconMouseOver: brightness == InterfaceBrightness.light
+                          ? Colors.black
+                          : Colors.white,
+                      normal: Colors.transparent,
+                      mouseOver: brightness == InterfaceBrightness.light
+                          ? Colors.black.withOpacity(0.04)
+                          : Colors.white.withOpacity(0.04),
+                      mouseDown: brightness == InterfaceBrightness.light
+                          ? Colors.black.withOpacity(0.08)
+                          : Colors.white.withOpacity(0.08),
+                    ),
+                  ),
+                  MaximizeWindowButton(
+                    colors: WindowButtonColors(
+                      iconNormal: brightness == InterfaceBrightness.light
+                          ? Colors.black
+                          : Colors.white,
+                      iconMouseDown: brightness == InterfaceBrightness.light
+                          ? Colors.black
+                          : Colors.white,
+                      iconMouseOver: brightness == InterfaceBrightness.light
+                          ? Colors.black
+                          : Colors.white,
+                      normal: Colors.transparent,
+                      mouseOver: brightness == InterfaceBrightness.light
+                          ? Colors.black.withOpacity(0.04)
+                          : Colors.white.withOpacity(0.04),
+                      mouseDown: brightness == InterfaceBrightness.light
+                          ? Colors.black.withOpacity(0.08)
+                          : Colors.white.withOpacity(0.08),
+                    ),
+                  ),
+                  CloseWindowButton(
+                    onPressed: () {
+                      appWindow.close();
+                    },
+                    colors: WindowButtonColors(
+                      iconNormal: brightness == InterfaceBrightness.light
+                          ? Colors.black
+                          : Colors.white,
+                      iconMouseDown: brightness == InterfaceBrightness.light
+                          ? Colors.black
+                          : Colors.white,
+                      iconMouseOver: brightness == InterfaceBrightness.light
+                          ? Colors.black
+                          : Colors.white,
+                      normal: Colors.transparent,
+                      mouseOver: brightness == InterfaceBrightness.light
+                          ? Colors.black.withOpacity(0.04)
+                          : Colors.white.withOpacity(0.04),
+                      mouseDown: brightness == InterfaceBrightness.light
+                          ? Colors.black.withOpacity(0.08)
+                          : Colors.white.withOpacity(0.08),
+                    ),
+                  ),
+                ],
+              ),
             ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
-    );
+          )
+        : Container();
   }
 }
