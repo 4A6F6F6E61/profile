@@ -7,7 +7,7 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Window.initialize();
   await Window.setEffect(
-    effect: WindowEffect.mica,
+    effect: WindowEffect.aero,
     color: Colors.transparent,
   );
   if (Platform.isWindows) {
@@ -17,8 +17,9 @@ Future<void> main() async {
   if (Platform.isWindows) {
     doWhenWindowReady(() {
       appWindow
-        ..minSize = const Size(500, 155)
-        ..size = const Size(700, 170)
+        ..minSize = const Size(600, 170)
+        ..size = const Size(600, 170)
+        ..maxSize = const Size(600, 170)
         ..alignment = Alignment.bottomCenter
         ..show();
     });
@@ -32,7 +33,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const FluentApp(
-      title: 'Flutter Demo',
+      title: 'Profile Switcher',
       home: MyHomePage(),
     );
   }
@@ -81,65 +82,63 @@ class _MyHomePageState extends State<MyHomePage> {
       Platform.isMacOS ? InterfaceBrightness.auto : InterfaceBrightness.dark;
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Column(
-        children: [
-          WindowTitleBar(
-            brightness: brightness,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Column(
-                children: [
-                  IconButton(
-                    icon: const Icon(FluentIcons.cat,
-                        size: 80, color: Colors.white),
-                    onPressed: () => openFirefox(
-                        "C:/Program Files/Mozilla Firefox/firefox.exe",
-                        ["-p", "Entertainment"]),
-                  ),
-                  const Text("Entertainment",
-                      style: TextStyle(fontSize: 16, color: Colors.white)),
-                ],
-              ),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  IconButton(
-                    icon: const Icon(FluentIcons.authenticator_app,
-                        size: 80, color: Colors.white),
-                    onPressed: () => openFirefox(
-                        "C:/Program Files/Mozilla Firefox/firefox.exe",
-                        ["-p", "Homework"]),
-                  ),
-                  const Text("Homework",
-                      style: TextStyle(fontSize: 16, color: Colors.white)),
-                ],
-              ),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  IconButton(
-                    icon: const Icon(FluentIcons.developer_tools,
-                        size: 80, color: Colors.white),
-                    onPressed: () => openFirefox(
-                        "C:/Program Files/Firefox Developer Edition/firefox.exe",
-                        ["-p", "dev-edition-default"]),
-                  ),
-                  const Text("Dev",
-                      style: TextStyle(fontSize: 16, color: Colors.white)),
-                ],
-              ),
-            ],
-          ),
-        ],
-      ),
+    return Column(
+      children: [
+        WindowTitleBar(
+          brightness: brightness,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            Column(
+              children: [
+                IconButton(
+                  icon: const Icon(FluentIcons.cat,
+                      size: 80, color: Colors.white),
+                  onPressed: () => openFirefox(
+                      "C:/Program Files/Mozilla Firefox/firefox.exe",
+                      ["-p", "Entertainment"]),
+                ),
+                const Text("Entertainment",
+                    style: TextStyle(fontSize: 16, color: Colors.white)),
+              ],
+            ),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                IconButton(
+                  icon: const Icon(FluentIcons.authenticator_app,
+                      size: 80, color: Colors.white),
+                  onPressed: () => openFirefox(
+                      "C:/Program Files/Mozilla Firefox/firefox.exe",
+                      ["-p", "Homework"]),
+                ),
+                const Text("Homework",
+                    style: TextStyle(fontSize: 16, color: Colors.white)),
+              ],
+            ),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                IconButton(
+                  icon: const Icon(FluentIcons.developer_tools,
+                      size: 80, color: Colors.white),
+                  onPressed: () => openFirefox(
+                      "C:/Program Files/Firefox Developer Edition/firefox.exe",
+                      ["-p", "dev-edition-default"]),
+                ),
+                const Text("Dev",
+                    style: TextStyle(fontSize: 16, color: Colors.white)),
+              ],
+            ),
+          ],
+        ),
+      ],
     );
   }
 
   void openFirefox(String exe, List<String> args) async {
-    await Process.run(exe, args);
+    await Process.start(exe, args);
     exit(0);
   }
 }
@@ -182,7 +181,7 @@ class WindowTitleBar extends StatelessWidget {
                           : Colors.white.withOpacity(0.08),
                     ),
                   ),
-                  MaximizeWindowButton(
+                  SettingsWindowButton(
                     colors: WindowButtonColors(
                       iconNormal: brightness == InterfaceBrightness.light
                           ? Colors.black
@@ -204,7 +203,7 @@ class WindowTitleBar extends StatelessWidget {
                   ),
                   CloseWindowButton(
                     onPressed: () {
-                      appWindow.close();
+                      exit(0);
                     },
                     colors: WindowButtonColors(
                       iconNormal: brightness == InterfaceBrightness.light
@@ -230,5 +229,33 @@ class WindowTitleBar extends StatelessWidget {
             ),
           )
         : Container();
+  }
+}
+
+class SettingsWindowButton extends WindowButton {
+  SettingsWindowButton(
+      {Key? key,
+      WindowButtonColors? colors,
+      VoidCallback? onPressed,
+      bool? animate})
+      : super(
+          key: key,
+          colors: colors,
+          animate: animate ?? false,
+          iconBuilder: (buttonContext) => Icon(
+            FluentIcons.settings,
+            color: buttonContext.iconColor,
+            size: 13,
+          ),
+          onPressed: onPressed ?? () => settingsButtonOnPressed(),
+        );
+}
+
+void settingsButtonOnPressed() {
+  //appWindow.maximizeOrRestore();
+  if (appWindow.size == const Size(600, 170)) {
+    appWindow.size = const Size(700, 500);
+  } else {
+    appWindow.size = const Size(600, 170);
   }
 }
