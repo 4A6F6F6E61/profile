@@ -1,6 +1,7 @@
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:flutter_acrylic/flutter_acrylic.dart';
+
 import 'home.dart';
 import 'settings.dart';
 import 'dart:io';
@@ -10,7 +11,7 @@ Future<void> main() async {
   await Window.initialize();
   await Window.setEffect(
     effect: WindowEffect.aero,
-    color: Colors.transparent,
+    color: const Color(0xCC222222),
   );
   if (Platform.isWindows) {
     await Window.hideWindowControls();
@@ -34,9 +35,13 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return FluentApp(
       title: 'Profile Switcher',
+      theme: ThemeData(
+        accentColor: Colors.red,
+        brightness: Brightness.dark,
+      ),
       routes: {
         '/': (context) => const MyHomePage(),
-        '/settings': (context) => const Settings(),
+        '/settings': (context) => const SettingsNav(),
       },
     );
   }

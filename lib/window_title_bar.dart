@@ -102,3 +102,91 @@ class WindowTitleBar extends StatelessWidget {
         : Container();
   }
 }
+
+class TitleBarButtons extends StatelessWidget {
+  final InterfaceBrightness brightness;
+  const TitleBarButtons({Key? key, required this.brightness}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Platform.isWindows
+        ? Row(
+            children: [
+              MinimizeWindowButton(
+                colors: WindowButtonColors(
+                  iconNormal: brightness == InterfaceBrightness.light
+                      ? Colors.black
+                      : Colors.white,
+                  iconMouseDown: brightness == InterfaceBrightness.light
+                      ? Colors.black
+                      : Colors.white,
+                  iconMouseOver: brightness == InterfaceBrightness.light
+                      ? Colors.black
+                      : Colors.white,
+                  normal: Colors.transparent,
+                  mouseOver: brightness == InterfaceBrightness.light
+                      ? Colors.black.withOpacity(0.04)
+                      : Colors.white.withOpacity(0.04),
+                  mouseDown: brightness == InterfaceBrightness.light
+                      ? Colors.black.withOpacity(0.08)
+                      : Colors.white.withOpacity(0.08),
+                ),
+              ),
+              SettingsWindowButton(
+                colors: WindowButtonColors(
+                  iconNormal: brightness == InterfaceBrightness.light
+                      ? Colors.black
+                      : Colors.white,
+                  iconMouseDown: brightness == InterfaceBrightness.light
+                      ? Colors.black
+                      : Colors.white,
+                  iconMouseOver: brightness == InterfaceBrightness.light
+                      ? Colors.black
+                      : Colors.white,
+                  normal: Colors.transparent,
+                  mouseOver: brightness == InterfaceBrightness.light
+                      ? Colors.black.withOpacity(0.04)
+                      : Colors.white.withOpacity(0.04),
+                  mouseDown: brightness == InterfaceBrightness.light
+                      ? Colors.black.withOpacity(0.08)
+                      : Colors.white.withOpacity(0.08),
+                ),
+                onPressed: () {
+                  Navigator.popUntil(context, (route) {
+                    if (route.settings.name == "/") {
+                      Navigator.of(context).pushNamed("/settings");
+                    } else if (route.settings.name == "/settings") {
+                      Navigator.of(context).pushNamed("/");
+                    }
+                    return true;
+                  });
+                },
+              ),
+              CloseWindowButton(
+                onPressed: () {
+                  exit(0);
+                },
+                colors: WindowButtonColors(
+                  iconNormal: brightness == InterfaceBrightness.light
+                      ? Colors.black
+                      : Colors.white,
+                  iconMouseDown: brightness == InterfaceBrightness.light
+                      ? Colors.black
+                      : Colors.white,
+                  iconMouseOver: brightness == InterfaceBrightness.light
+                      ? Colors.black
+                      : Colors.white,
+                  normal: Colors.transparent,
+                  mouseOver: brightness == InterfaceBrightness.light
+                      ? Colors.black.withOpacity(0.04)
+                      : Colors.white.withOpacity(0.04),
+                  mouseDown: brightness == InterfaceBrightness.light
+                      ? Colors.black.withOpacity(0.08)
+                      : Colors.white.withOpacity(0.08),
+                ),
+              ),
+            ],
+          )
+        : Container();
+  }
+}
