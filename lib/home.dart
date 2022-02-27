@@ -1,5 +1,6 @@
 import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'interface_brightness.dart';
 import 'window_title_bar.dart';
 import 'browser_item.dart';
@@ -15,11 +16,21 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   InterfaceBrightness brightness =
       Platform.isMacOS ? InterfaceBrightness.auto : InterfaceBrightness.dark;
+  List<String>? dimensions;
 
   @override
   void initState() {
     super.initState();
-    appWindow.size = const Size(600, 170);
+    setDimensions();
+  }
+
+  Future<void> setDimensions() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() {
+      dimensions = prefs.getStringList('dimensions');
+    });
+    appWindow.size =
+        Size(double.parse(dimensions!.first), double.parse(dimensions!.last));
   }
 
   @override
@@ -29,7 +40,7 @@ class _MyHomePageState extends State<MyHomePage> {
         WindowTitleBar(
           brightness: brightness,
         ),
-        Row(
+        Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             BrowserItem(

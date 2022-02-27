@@ -18,17 +18,20 @@ class BrowserItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        IconButton(
-          icon: icon,
-          onPressed: () => onPressed(),
-        ),
-        Text(
-          text,
-          style: TextStyle(fontSize: fontSize, color: textColor),
-        ),
-      ],
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 12),
+      child: Column(
+        children: [
+          IconButton(
+            icon: icon,
+            onPressed: () => onPressed(),
+          ),
+          Text(
+            text,
+            style: TextStyle(fontSize: fontSize, color: textColor),
+          ),
+        ],
+      ),
     );
   }
 }
