@@ -49,7 +49,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 size: 80,
                 color: Colors.white,
               ),
-              onPressed: () => openFirefox(
+              onPressed: () => openBrowser(
                 "C:/Program Files/Mozilla Firefox/firefox.exe",
                 ["-p", "Entertainment"],
               ),
@@ -63,7 +63,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 size: 80,
                 color: Colors.white,
               ),
-              onPressed: () => openFirefox(
+              onPressed: () => openBrowser(
                 "C:/Program Files/Mozilla Firefox/firefox.exe",
                 ["-p", "Homework"],
               ),
@@ -77,7 +77,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 size: 80,
                 color: Colors.white,
               ),
-              onPressed: () => openFirefox(
+              onPressed: () => openBrowser(
                 "C:/Program Files/Firefox Developer Edition/firefox.exe",
                 ["-p", "dev-edition-default"],
               ),
@@ -91,7 +91,7 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  void openFirefox(String exe, List<String> args) async {
+  void openBrowser(String exe, List<String> args) async {
     await Process.start(exe, args);
     exit(0);
   }
