@@ -8,6 +8,9 @@ import 'settings.dart';
 import 'dart:io';
 
 AccentColor? accentColor;
+A pos = A.HORIZONTAL;
+
+enum A { VERTICAL, HORIZONTAL }
 
 Future<void> main() async {
   final prefs = await SharedPreferences.getInstance();
@@ -16,7 +19,7 @@ Future<void> main() async {
   accentColor = await getColor();
   await Window.initialize();
   await Window.setEffect(
-    effect: WindowEffect.aero,
+    effect: WindowEffect.mica,
     color: const Color(0xCC222222),
   );
   if (Platform.isWindows) {
@@ -30,12 +33,24 @@ Future<void> main() async {
   }
 
   runApp(const MyApp());
-  if (Platform.isWindows) {
+  if (Platform.isWindows && pos == A.VERTICAL) {
     doWhenWindowReady(() {
       appWindow
-        ..size =
-            Size(double.parse(dimensions!.first), double.parse(dimensions.last))
-        ..alignment = Alignment.centerRight
+        ..size = Size(
+          double.parse(dimensions!.first),
+          double.parse(dimensions.last),
+        )
+        ..alignment = Alignment.bottomCenter
+        ..show();
+    });
+  } else if (Platform.isWindows && pos == A.HORIZONTAL) {
+    doWhenWindowReady(() {
+      appWindow
+        ..size = Size(
+          double.parse(dimensions!.last) * 1.2,
+          double.parse(dimensions.first) * 1.2,
+        )
+        ..alignment = Alignment.bottomCenter
         ..show();
     });
   }
@@ -68,7 +83,6 @@ Future<AccentColor> getColor() async {
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return FluentApp(
@@ -78,7 +92,7 @@ class MyApp extends StatelessWidget {
         brightness: Brightness.dark,
       ),
       routes: {
-        '/': (context) => const MyHomePage(),
+        '/': (context) => const MyHomePageH(),
         '/settings': (context) => const SettingsNav(),
       },
     );
