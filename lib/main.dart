@@ -1,3 +1,5 @@
+// ignore_for_file: constant_identifier_names
+
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:flutter_acrylic/flutter_acrylic.dart';
@@ -8,7 +10,7 @@ import 'settings.dart';
 import 'dart:io';
 
 AccentColor? accentColor;
-A pos = A.HORIZONTAL;
+A pos = A.VERTICAL;
 
 enum A { VERTICAL, HORIZONTAL }
 
@@ -31,6 +33,11 @@ Future<void> main() async {
     dimensions = ["140", "450"];
     prefs.setStringList('dimensions', dimensions);
   }
+  if (!prefs.containsKey('browserProfiles')) {
+    // TODO: fixe werte nur zum testen
+    prefs.setStringList(
+        'browserProfiles', <String>["Entertainment", "Homework", "Dev"]);
+  }
 
   runApp(const MyApp());
   if (Platform.isWindows && pos == A.VERTICAL) {
@@ -40,7 +47,7 @@ Future<void> main() async {
           double.parse(dimensions!.first),
           double.parse(dimensions.last),
         )
-        ..alignment = Alignment.bottomCenter
+        ..alignment = Alignment.topRight
         ..show();
     });
   } else if (Platform.isWindows && pos == A.HORIZONTAL) {
@@ -92,7 +99,13 @@ class MyApp extends StatelessWidget {
         brightness: Brightness.dark,
       ),
       routes: {
-        '/': (context) => const MyHomePageH(),
+        '/': (context) {
+          if (pos == A.VERTICAL) {
+            return const MyHomePageV();
+          } else {
+            return const MyHomePageH();
+          }
+        },
         '/settings': (context) => const SettingsNav(),
       },
     );
