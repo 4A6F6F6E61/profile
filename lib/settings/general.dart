@@ -9,7 +9,15 @@ class SettingsGeneral extends StatefulWidget {
 }
 
 class _SettingsGeneralState extends State<SettingsGeneral> {
-  List<String> values = const ['Cyan', 'Green', 'Yellow', 'Red'];
+  List<String> values = const [
+    "red",
+    "orange",
+    "yellow",
+    "green",
+    "teal",
+    "blue",
+    "purple"
+  ];
   String? comboBoxValue;
   String? settingsColor = '';
   bool value = false;

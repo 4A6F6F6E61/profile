@@ -12,9 +12,9 @@ class SettingsAddProfile extends StatefulWidget {
 
 class _SettingsAddProfileState extends State<SettingsAddProfile> {
   List<String> iconValues = const [
-    'FluentIcons.cat',
-    'FluentIcons.authenticator_app',
-    'FluentIcons.developer_tools'
+    'Cat', //'FluentIcons.cat',
+    'Authenticator', //'FluentIcons.authenticator_app',
+    'Dev tools', //'FluentIcons.developer_tools'
   ];
   String? iconComboBoxValue;
   String? iconChoose;
@@ -32,105 +32,156 @@ class _SettingsAddProfileState extends State<SettingsAddProfile> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(10.0),
-      child: Column(
-        children: [
-          const Text(
-            'Add a new profile',
-            style: TextStyle(
-              fontSize: 20,
-            ),
-          ),
-          m.Card(
-            color: const Color.fromARGB(0, 0, 0, 0),
-            child: Container(
-              margin: const EdgeInsets.all(10.0),
-              child: Column(
-                children: [
-                  Row(
+    return Column(
+      children: [
+        Container(
+          padding: const EdgeInsets.all(10.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                'Add a new profile',
+                style: TextStyle(
+                  fontSize: 20,
+                ),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              m.Card(
+                color: const Color.fromARGB(0, 0, 0, 0),
+                child: Container(
+                  margin: const EdgeInsets.all(10.0),
+                  child: Column(
                     children: [
-                      const SizedBox(width: 40.0, child: Text("Icon:")),
-                      Expanded(
-                        child: Combobox<String>(
-                          placeholder: Text(iconChoose ?? 'Choose an icon...'),
-                          items: iconValues
-                              .map((e) => ComboboxItem<String>(
-                                    value: e,
-                                    child: Text(e),
-                                  ))
-                              .toList(),
-                          value: iconComboBoxValue,
-                          onChanged: (value) async {
-                            // print(value);
-                            if (value != null) {
-                              setState(() => iconComboBoxValue = value);
-                            }
-                          },
-                        ),
-                      ),
-                      const SizedBox(width: 10.0),
-                      const Expanded(
-                        child: Form(
-                          child: TextBox(placeholder: "Profile name"),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 10),
-                  Row(
-                    children: [
-                      const SizedBox(width: 40.0, child: Text("Type:")),
-                      Expanded(
-                        child: Combobox<String>(
-                          placeholder:
-                              Text(browserChoose ?? 'Choose a browser...'),
-                          items: browserValues
-                              .map((e) => ComboboxItem<String>(
-                                    value: e,
-                                    child: Text(e),
-                                  ))
-                              .toList(),
-                          value: browserComboBoxValue,
-                          onChanged: (value) async {
-                            // print(value);
-                            if (value != null) {
-                              setState(() => browserComboBoxValue = value);
-                            }
-                          },
-                        ),
-                      ),
-                      const SizedBox(width: 10.0),
-                      Expanded(
-                        child: Form(
-                          child: TextBox(
-                            placeholder: "Browser binary location",
-                            suffix: IconButton(
-                              onPressed: () async {
-                                FilePickerResult? result =
-                                    await FilePicker.platform.pickFiles(
-                                  type: FileType.custom,
-                                  allowedExtensions: ['exe'],
-                                );
-                                if (result != null) {
-                                  binloc = result.files.single.path;
-                                } else {
-                                  // User canceled the picker
+                      Row(
+                        children: [
+                          const SizedBox(width: 40.0, child: Text("Icon:")),
+                          Expanded(
+                            child: Combobox<String>(
+                              placeholder:
+                                  Text(iconChoose ?? 'Choose an icon...'),
+                              items: iconValues
+                                  .map((e) => ComboboxItem<String>(
+                                        value: e,
+                                        child: Text(e),
+                                      ))
+                                  .toList(),
+                              value: iconComboBoxValue,
+                              onChanged: (value) async {
+                                // print(value);
+                                if (value != null) {
+                                  setState(() => iconComboBoxValue = value);
                                 }
                               },
-                              icon: const Icon(FluentIcons.open_file),
                             ),
                           ),
+                          const SizedBox(width: 10.0),
+                          const Expanded(
+                            child: Form(
+                              child: TextBox(placeholder: "Profile name"),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 10),
+                      Row(
+                        children: [
+                          const SizedBox(width: 40.0, child: Text("Type:")),
+                          Expanded(
+                            child: Combobox<String>(
+                              placeholder:
+                                  Text(browserChoose ?? 'Choose a browser...'),
+                              items: browserValues
+                                  .map((e) => ComboboxItem<String>(
+                                        value: e,
+                                        child: Text(e),
+                                      ))
+                                  .toList(),
+                              value: browserComboBoxValue,
+                              onChanged: (value) async {
+                                // print(value);
+                                if (value != null) {
+                                  setState(() => browserComboBoxValue = value);
+                                }
+                              },
+                            ),
+                          ),
+                          const SizedBox(width: 10.0),
+                          Expanded(
+                            child: Form(
+                              child: TextBox(
+                                placeholder: "Browser binary location",
+                                suffix: IconButton(
+                                  onPressed: () async {
+                                    FilePickerResult? result =
+                                        await FilePicker.platform.pickFiles(
+                                      type: FileType.custom,
+                                      allowedExtensions: ['exe'],
+                                    );
+                                    if (result != null) {
+                                      binloc = result.files.single.path;
+                                    } else {
+                                      // User canceled the picker
+                                    }
+                                  },
+                                  icon: const Icon(FluentIcons.open_file),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      Container(
+                        margin: const EdgeInsets.only(top: 10),
+                        child: SizedBox(
+                          width: double.infinity,
+                          child: Button(
+                              child: const Text('Save'), onPressed: () => {}),
                         ),
                       ),
                     ],
                   ),
-                ],
+                ),
               ),
-            ),
+            ],
           ),
-        ],
-      ),
+        ),
+        Container(
+          padding: const EdgeInsets.all(10.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                'Preview:',
+                style: TextStyle(
+                  fontSize: 18,
+                ),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              m.Card(
+                color: const Color.fromARGB(0, 0, 0, 0),
+                child: Container(
+                  margin: const EdgeInsets.all(10.0),
+                  child: Column(
+                    children: [
+                      Row(
+                        children: const [
+                          Expanded(
+                            child: Text("WIP"),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }
