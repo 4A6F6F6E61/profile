@@ -43,10 +43,6 @@ Future<void> main() async {
   if (Platform.isWindows && pos == A.VERTICAL) {
     doWhenWindowReady(() {
       appWindow
-        ..size = Size(
-          double.parse(dimensions!.first),
-          double.parse(dimensions.last),
-        )
         ..alignment = Alignment.topRight
         ..show();
     });

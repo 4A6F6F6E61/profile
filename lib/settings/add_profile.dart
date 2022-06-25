@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:file_picker/file_picker.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/material.dart' as m;
@@ -19,6 +21,8 @@ class _SettingsAddProfileState extends State<SettingsAddProfile> {
   String? iconComboBoxValue;
   String? iconChoose;
 
+  TextEditingController _binaryInputController = TextEditingController();
+
   List<String> browserValues = const [
     'Firefox',
     'Chrome',
@@ -28,7 +32,48 @@ class _SettingsAddProfileState extends State<SettingsAddProfile> {
   String? browserComboBoxValue;
   String? browserChoose;
 
-  String? binloc;
+  String binloc = "";
+  String profileName = "";
+  String displayName = "";
+
+  Future<void> saveProfile() async {
+    print(browserComboBoxValue);
+
+    print(iconComboBoxValue);
+    if (browserComboBoxValue == null || iconComboBoxValue == null) return;
+    if (browserComboBoxValue!.isEmpty ||
+        iconComboBoxValue!.isEmpty ||
+        profileName.isEmpty ||
+        binloc.isEmpty ||
+        displayName.isEmpty) {
+      if (!(binloc.endsWith(".exe") || binloc.endsWith(".app"))) {
+        // error: no binary location
+      }
+      //error: empty
+      return;
+    }
+    if (await File(binloc).exists()) {
+      //error: file doesn't exist
+      return;
+    }
+    final prefs = await SharedPreferences.getInstance();
+    if (prefs.containsKey(profileName)) {
+      //error: profile name already exists
+      return;
+    }
+    var listTemp = prefs.getStringList('browserProfiles') ?? [];
+    listTemp.add(profileName);
+    prefs.setStringList(
+        'browserProfiles', listTemp); //add profile name to list of profiles
+    prefs.setStringList(profileName, [
+      iconComboBoxValue!,
+      "80",
+      binloc,
+      "-p", // TODO: change later for different browsers
+      profileName,
+      displayName,
+    ]); //add profile to list of profiles
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -56,6 +101,23 @@ class _SettingsAddProfileState extends State<SettingsAddProfile> {
                     children: [
                       Row(
                         children: [
+                          const SizedBox(
+                            width: 100.0,
+                            child: Text("Display Name:"),
+                          ),
+                          Expanded(
+                            child: TextBox(
+                              controller: TextEditingController(
+                                text: displayName,
+                              ),
+                              onChanged: (value) => displayName = value,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 10.0),
+                      Row(
+                        children: [
                           const SizedBox(width: 40.0, child: Text("Icon:")),
                           Expanded(
                             child: Combobox<String>(
@@ -77,9 +139,13 @@ class _SettingsAddProfileState extends State<SettingsAddProfile> {
                             ),
                           ),
                           const SizedBox(width: 10.0),
-                          const Expanded(
-                            child: Form(
-                              child: TextBox(placeholder: "Profile name"),
+                          Expanded(
+                            child: TextBox(
+                              placeholder: "Profile name",
+                              onChanged: (value) {
+                                print("Profile name: $value");
+                                setState(() => profileName = value);
+                              },
                             ),
                           ),
                         ],
@@ -109,24 +175,28 @@ class _SettingsAddProfileState extends State<SettingsAddProfile> {
                           ),
                           const SizedBox(width: 10.0),
                           Expanded(
-                            child: Form(
-                              child: TextBox(
-                                placeholder: "Browser binary location",
-                                suffix: IconButton(
-                                  onPressed: () async {
-                                    FilePickerResult? result =
-                                        await FilePicker.platform.pickFiles(
-                                      type: FileType.custom,
-                                      allowedExtensions: ['exe'],
-                                    );
-                                    if (result != null) {
-                                      binloc = result.files.single.path;
-                                    } else {
-                                      // User canceled the picker
-                                    }
-                                  },
-                                  icon: const Icon(FluentIcons.open_file),
-                                ),
+                            child: TextBox(
+                              placeholder: "Browser binary location",
+                              controller: _binaryInputController,
+                              onChanged: (value) {
+                                print("Browser binary location: $value");
+                                setState(() => binloc = value);
+                              },
+                              suffix: IconButton(
+                                onPressed: () async {
+                                  FilePickerResult? result =
+                                      await FilePicker.platform.pickFiles(
+                                    type: FileType.custom,
+                                    allowedExtensions: ['exe', 'app'],
+                                  );
+                                  if (result != null) {
+                                    binloc = result.files.single.path ?? "";
+                                    _binaryInputController.text = binloc;
+                                  } else {
+                                    // User canceled the picker
+                                  }
+                                },
+                                icon: const Icon(FluentIcons.open_file),
                               ),
                             ),
                           ),
@@ -137,7 +207,9 @@ class _SettingsAddProfileState extends State<SettingsAddProfile> {
                         child: SizedBox(
                           width: double.infinity,
                           child: Button(
-                              child: const Text('Save'), onPressed: () => {}),
+                            child: const Text('Save'),
+                            onPressed: () async => saveProfile(),
+                          ),
                         ),
                       ),
                     ],
