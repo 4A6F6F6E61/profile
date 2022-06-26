@@ -99,7 +99,7 @@ class _SettingsAddProfileState extends State<SettingsAddProfile> {
         par2 = "-p";
         break;
       case "Opera":
-        par2 = "--profile=";
+        par2 = "--profile-directory=";
         break;
       case "Edge":
         par2 = "--profile-directory=$profileName";
@@ -112,8 +112,8 @@ class _SettingsAddProfileState extends State<SettingsAddProfile> {
       iconComboBoxValue!,
       "80",
       binloc,
-      par2, // TODO: change later for different browsers
-      profileName,
+      par2,
+      browserComboBoxValue == "Firefox" ? profileName : "",
       displayName,
     ]); //add profile to list of profiles
     showContentDialog(context, "Profile saved", iserror: false);
@@ -222,7 +222,6 @@ class _SettingsAddProfileState extends State<SettingsAddProfile> {
                               placeholder: "Browser binary location",
                               controller: _binaryInputController,
                               onChanged: (value) {
-                                print("Browser binary location: $value");
                                 setState(() => binloc = value);
                               },
                               suffix: IconButton(
