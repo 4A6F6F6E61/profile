@@ -5,6 +5,8 @@ import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'window_title_bar.dart';
 import 'settings/general.dart';
 import 'settings/add_profile.dart';
+import 'settings/licenses.dart';
+import 'settings/about.dart';
 
 class SettingsNav extends StatefulWidget {
   const SettingsNav({Key? key}) : super(key: key);
@@ -71,18 +73,28 @@ class _SettingsNavState extends State<SettingsNav> {
         items: [
           PaneItemSeparator(),
           PaneItem(
-            icon: const Icon(FluentIcons.checkbox_composite),
+            icon: const Icon(FluentIcons.settings),
             title: const Text('General'),
           ),
           PaneItem(
-            icon: const Icon(FluentIcons.checkbox_composite),
+            icon: const Icon(FluentIcons.add),
             title: const Text('Add Browser Profile'),
+          ),
+          PaneItem(
+            icon: const Icon(FluentIcons.library),
+            title: const Text('Licenses'),
+          ),
+          PaneItem(
+            icon: const Icon(FluentIcons.info),
+            title: const Text('About'),
           ),
         ],
       ),
       content: NavigationBody(index: index, children: const [
         SettingsGeneral(),
         SettingsAddProfile(),
+        SettingsLicenses(),
+        SettingsAbout(),
       ]),
     );
   }

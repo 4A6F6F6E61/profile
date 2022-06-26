@@ -36,43 +36,87 @@ class _SettingsAddProfileState extends State<SettingsAddProfile> {
   String profileName = "";
   String displayName = "";
 
-  Future<void> saveProfile() async {
-    print(browserComboBoxValue);
+  String? resultdialog = "";
 
-    print(iconComboBoxValue);
-    if (browserComboBoxValue == null || iconComboBoxValue == null) return;
+  void showContentDialog(BuildContext context, String error,
+      {bool iserror = true}) async {
+    resultdialog = await showDialog<String>(
+      context: context,
+      builder: (context) => ContentDialog(
+        title: Text(iserror ? "Error" : "Success"),
+        content: Text(
+          error,
+        ),
+        actions: [
+          Button(
+            child: const Text('Ok'),
+            onPressed: () => Navigator.pop(context, 'User okd dialog'),
+          ),
+        ],
+      ),
+    );
+    setState(() {});
+  }
+
+  Future<void> saveProfile() async {
+    if (browserComboBoxValue == null || iconComboBoxValue == null) {
+      showContentDialog(context, "Please choose a browser and an icon");
+      return;
+    }
     if (browserComboBoxValue!.isEmpty ||
         iconComboBoxValue!.isEmpty ||
         profileName.isEmpty ||
         binloc.isEmpty ||
         displayName.isEmpty) {
       if (!(binloc.endsWith(".exe") || binloc.endsWith(".app"))) {
-        // error: no binary location
+        showContentDialog(
+            context, "Browser binary location must end with .exe or .app");
+        return;
       }
-      //error: empty
+      showContentDialog(context, "Please fill in all fields");
+
       return;
     }
-    if (await File(binloc).exists()) {
-      //error: file doesn't exist
+    if (!await File(binloc).exists()) {
+      showContentDialog(context, "File does not exists");
       return;
     }
     final prefs = await SharedPreferences.getInstance();
     if (prefs.containsKey(profileName)) {
-      //error: profile name already exists
+      showContentDialog(context, "Profile name already exists");
       return;
     }
     var listTemp = prefs.getStringList('browserProfiles') ?? [];
     listTemp.add(profileName);
     prefs.setStringList(
         'browserProfiles', listTemp); //add profile name to list of profiles
+    var par2 = "";
+    switch (browserComboBoxValue) {
+      case "Chrome":
+        par2 = "--profile-directory=$profileName";
+        break;
+      case "Firefox":
+        par2 = "-p";
+        break;
+      case "Opera":
+        par2 = "--profile=";
+        break;
+      case "Edge":
+        par2 = "--profile-directory=$profileName";
+        break;
+      default:
+        par2 = "-p";
+        break;
+    }
     prefs.setStringList(profileName, [
       iconComboBoxValue!,
       "80",
       binloc,
-      "-p", // TODO: change later for different browsers
+      par2, // TODO: change later for different browsers
       profileName,
       displayName,
     ]); //add profile to list of profiles
+    showContentDialog(context, "Profile saved", iserror: false);
   }
 
   @override
@@ -143,7 +187,6 @@ class _SettingsAddProfileState extends State<SettingsAddProfile> {
                             child: TextBox(
                               placeholder: "Profile name",
                               onChanged: (value) {
-                                print("Profile name: $value");
                                 setState(() => profileName = value);
                               },
                             ),

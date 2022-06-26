@@ -141,7 +141,7 @@ class _MyHomePageStateV extends State<MyHomePageV> {
 
   void openBrowser(String exe, List<String> args) async {
     await Process.start(exe, args);
-    exit(0);
+    //exit(0);
   }
 }
 
