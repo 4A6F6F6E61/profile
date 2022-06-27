@@ -73,7 +73,7 @@ class _SettingsAddProfileState extends State<SettingsAddProfile> {
             context, "Browser binary location must end with .exe or .app");
         return;
       }
-      showContentDialog(context, "Please fill in all fields");
+      showContentDialog(context, "Please fill out all fields");
 
       return;
     }
@@ -81,15 +81,16 @@ class _SettingsAddProfileState extends State<SettingsAddProfile> {
       showContentDialog(context, "File does not exists");
       return;
     }
+
     final prefs = await SharedPreferences.getInstance();
+
     if (prefs.containsKey(profileName)) {
       showContentDialog(context, "Profile name already exists");
       return;
     }
     var listTemp = prefs.getStringList('browserProfiles') ?? [];
     listTemp.add(profileName);
-    prefs.setStringList(
-        'browserProfiles', listTemp); //add profile name to list of profiles
+    prefs.setStringList('browserProfiles', listTemp);
     var par2 = "";
     switch (browserComboBoxValue) {
       case "Chrome":
@@ -99,7 +100,7 @@ class _SettingsAddProfileState extends State<SettingsAddProfile> {
         par2 = "-p";
         break;
       case "Opera":
-        par2 = "--profile-directory=";
+        par2 = "--profile-directory=$profileName";
         break;
       case "Edge":
         par2 = "--profile-directory=$profileName";
@@ -116,6 +117,7 @@ class _SettingsAddProfileState extends State<SettingsAddProfile> {
       browserComboBoxValue == "Firefox" ? profileName : "",
       displayName,
     ]); //add profile to list of profiles
+
     showContentDialog(context, "Profile saved", iserror: false);
   }
 
@@ -253,40 +255,6 @@ class _SettingsAddProfileState extends State<SettingsAddProfile> {
                             onPressed: () async => saveProfile(),
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-        Container(
-          padding: const EdgeInsets.all(10.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                'Preview:',
-                style: TextStyle(
-                  fontSize: 18,
-                ),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              m.Card(
-                color: const Color.fromARGB(0, 0, 0, 0),
-                child: Container(
-                  margin: const EdgeInsets.all(10.0),
-                  child: Column(
-                    children: [
-                      Row(
-                        children: const [
-                          Expanded(
-                            child: Text("WIP"),
-                          ),
-                        ],
                       ),
                     ],
                   ),

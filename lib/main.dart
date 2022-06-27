@@ -34,9 +34,7 @@ Future<void> main() async {
     prefs.setStringList('dimensions', dimensions);
   }
   if (!prefs.containsKey('browserProfiles')) {
-    // TODO: fixe werte nur zum testen
-    prefs.setStringList(
-        'browserProfiles', <String>["Entertainment", "Homework", "Dev"]);
+    prefs.setStringList('browserProfiles', <String>[]);
   }
 
   runApp(const MyApp());

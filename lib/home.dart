@@ -30,50 +30,24 @@ class _MyHomePageStateV extends State<MyHomePageV> {
   Future<void> load() async {
     await getBrowserStrings();
     await getBrowserItemStrings();
-    for (List<String> bis in browserItemStrings) {
-      items.add(
-          generateBrowserItem(bis[0], bis[1], bis[2], bis[3], bis[4], bis[5]));
+    if (browserItemStrings.isNotEmpty) {
+      for (List<String> bis in browserItemStrings) {
+        items.add(generateBrowserItem(
+            bis[0], bis[1], bis[2], bis[3], bis[4], bis[5]));
+      }
     }
     await setDimensions();
   }
 
   Future<void> getBrowserItemStrings() async {
     final prefs = await SharedPreferences.getInstance();
-    if (!prefs.containsKey("Entertainment")) {
-      prefs.setStringList("Entertainment", <String>[
-        "FluentIcons.cat",
-        "80",
-        "C:/Program Files/Mozilla Firefox/firefox.exe",
-        "-p",
-        "Entertainment",
-        "Entertainment"
-      ]);
-    }
-    if (!prefs.containsKey("Homework")) {
-      prefs.setStringList("Homework", <String>[
-        "FluentIcons.authenticator_app",
-        "80",
-        "C:/Program Files/Mozilla Firefox/firefox.exe",
-        "-p",
-        "Homework",
-        "Homework"
-      ]);
-    }
-    if (!prefs.containsKey("Dev")) {
-      prefs.setStringList("Dev", <String>[
-        "FluentIcons.developer_tools",
-        "80",
-        "C:/Program Files/Firefox Developer Edition/firefox.exe",
-        "-p",
-        "dev-edition-default",
-        "Dev"
-      ]);
-    }
-    for (String browserProfile in browserProfiles) {
-      var profile = prefs.getStringList(browserProfile)!;
-      setState(() {
-        browserItemStrings.add(profile);
-      });
+    if (browserProfiles.isNotEmpty) {
+      for (String browserProfile in browserProfiles) {
+        var profile = prefs.getStringList(browserProfile)!;
+        setState(() {
+          browserItemStrings.add(profile);
+        });
+      }
     }
   }
 
@@ -81,13 +55,13 @@ class _MyHomePageStateV extends State<MyHomePageV> {
       String browserBinLoc, String arg1, String arg2, String text) {
     IconData icon = FluentIcons.cat;
     switch (iconName) {
-      case "FluentIcons.cat":
+      case "Cat":
         icon = FluentIcons.cat;
         break;
-      case "FluentIcons.authenticator_app":
+      case "Authenticator":
         icon = FluentIcons.authenticator_app;
         break;
-      case "FluentIcons.developer_tools":
+      case "Dev tools":
         icon = FluentIcons.developer_tools;
         break;
       default:
@@ -112,7 +86,7 @@ class _MyHomePageStateV extends State<MyHomePageV> {
 
   Future<void> getBrowserStrings() async {
     final prefs = await SharedPreferences.getInstance();
-    browserProfiles = prefs.getStringList('browserProfiles')!;
+    browserProfiles = prefs.getStringList('browserProfiles') ?? [];
   }
 
   Future<void> setDimensions() async {
@@ -121,7 +95,11 @@ class _MyHomePageStateV extends State<MyHomePageV> {
       dimensions = prefs.getStringList('dimensions');
     });
     appWindow.size = Size(double.parse(dimensions!.first),
-        (double.parse(dimensions!.last) - 32) / 3 * items.length + 32);
+        (double.parse(dimensions!.last) - 32) / 3 * 1 + 32);
+    if (items.isNotEmpty) {
+      appWindow.size = Size(double.parse(dimensions!.first),
+          (double.parse(dimensions!.last) - 32) / 3 * items.length + 32);
+    }
   }
 
   @override
