@@ -10,9 +10,12 @@ import 'settings.dart';
 import 'dart:io';
 
 AccentColor? accentColor;
-A pos = A.VERTICAL;
+int pos = Orientation.HORIZONTAL;
 
-enum A { VERTICAL, HORIZONTAL }
+class Orientation {
+  static const int VERTICAL = 0;
+  static const int HORIZONTAL = 1;
+}
 
 Future<void> main() async {
   final prefs = await SharedPreferences.getInstance();
@@ -21,7 +24,7 @@ Future<void> main() async {
   accentColor = await getColor();
   await Window.initialize();
   await Window.setEffect(
-    effect: WindowEffect.mica,
+    effect: WindowEffect.acrylic,
     color: const Color(0xCC222222),
   );
   if (Platform.isWindows) {
@@ -33,20 +36,29 @@ Future<void> main() async {
     dimensions = ["140", "450"];
     prefs.setStringList('dimensions', dimensions);
   }
+  if (!prefs.containsKey('orientation')) {
+    prefs.setInt('orientation', Orientation.VERTICAL);
+  } else {
+    pos = prefs.getInt('orientation')!;
+  }
   if (!prefs.containsKey('browserProfiles')) {
     prefs.setStringList('browserProfiles', <String>[]);
   }
 
   runApp(const MyApp());
-  if (Platform.isWindows && pos == A.VERTICAL) {
+  if (Platform.isWindows && pos == Orientation.VERTICAL) {
+    var s = await getDimensionsV();
     doWhenWindowReady(() {
       appWindow
+        ..minSize = s
         ..alignment = Alignment.topRight
         ..show();
     });
-  } else if (Platform.isWindows && pos == A.HORIZONTAL) {
+  } else if (Platform.isWindows && pos == Orientation.HORIZONTAL) {
+    var s = await getDimensionsH();
     doWhenWindowReady(() {
       appWindow
+        ..minSize = s
         ..size = Size(
           double.parse(dimensions!.last) * 1.2,
           double.parse(dimensions.first) * 1.2,
@@ -81,6 +93,44 @@ Future<AccentColor> getColor() async {
   }
 }
 
+Future<Size> getDimensionsV() async {
+  List<String>? dimensions;
+  Size tempSize;
+  final prefs = await SharedPreferences.getInstance();
+  dimensions = prefs.getStringList('dimensions');
+  tempSize = Size(double.parse(dimensions!.first),
+      (double.parse(dimensions.last) - 32) / 3 * 1 + 32);
+  if (prefs.containsKey("browserProfiles")) {
+    tempSize = Size(
+        double.parse(dimensions.first),
+        (double.parse(dimensions.last) - 32) /
+                3 *
+                prefs.getStringList("browserProfiles")!.length +
+            32);
+  }
+  return tempSize;
+}
+
+Future<Size> getDimensionsH() async {
+  List<String>? dimensions;
+  Size tempSize;
+  final prefs = await SharedPreferences.getInstance();
+  dimensions = prefs.getStringList('dimensions');
+  tempSize = Size(
+    double.parse(dimensions!.last) * 1.2,
+    double.parse(dimensions.first) * 1.2,
+  );
+  if (prefs.containsKey("browserProfiles")) {
+    tempSize = Size(
+        double.parse(dimensions.last) *
+            1.2 /
+            3 *
+            prefs.getStringList("browserProfiles")!.length,
+        double.parse(dimensions.first) + 32);
+  }
+  return tempSize;
+}
+
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
@@ -93,13 +143,7 @@ class MyApp extends StatelessWidget {
         brightness: Brightness.dark,
       ),
       routes: {
-        '/': (context) {
-          if (pos == A.VERTICAL) {
-            return const MyHomePageV();
-          } else {
-            return const MyHomePageH();
-          }
-        },
+        '/': (context) => MyHomePage(orientation: pos),
         '/settings': (context) => const SettingsNav(),
       },
     );

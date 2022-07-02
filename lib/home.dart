@@ -1,19 +1,25 @@
+// ignore_for_file: no_logic_in_create_state
+
 import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'interface_brightness.dart';
 import 'window_title_bar.dart';
 import 'browser_item.dart';
+import "main.dart" as main;
 import 'dart:io';
 
-class MyHomePageV extends StatefulWidget {
-  const MyHomePageV({Key? key}) : super(key: key);
+class MyHomePage extends StatefulWidget {
+  final int orientation;
+  const MyHomePage({Key? key, required this.orientation}) : super(key: key);
 
   @override
-  State<MyHomePageV> createState() => _MyHomePageStateV();
+  State<MyHomePage> createState() => _MyHomePageState(orientation: orientation);
 }
 
-class _MyHomePageStateV extends State<MyHomePageV> {
+class _MyHomePageState extends State<MyHomePage> {
+  _MyHomePageState({required this.orientation});
+  int orientation;
   InterfaceBrightness brightness =
       Platform.isMacOS ? InterfaceBrightness.auto : InterfaceBrightness.dark;
   List<String>? dimensions;
@@ -94,120 +100,51 @@ class _MyHomePageStateV extends State<MyHomePageV> {
     setState(() {
       dimensions = prefs.getStringList('dimensions');
     });
-    appWindow.size = Size(double.parse(dimensions!.first),
-        (double.parse(dimensions!.last) - 32) / 3 * 1 + 32);
-    if (items.isNotEmpty) {
+    if (orientation == main.Orientation.VERTICAL) {
       appWindow.size = Size(double.parse(dimensions!.first),
-          (double.parse(dimensions!.last) - 32) / 3 * items.length + 32);
+          (double.parse(dimensions!.last) - 32) / 3 * 1 + 32);
+      if (items.isNotEmpty) {
+        appWindow.size = Size(double.parse(dimensions!.first),
+            (double.parse(dimensions!.last) - 32) / 3 * items.length + 32);
+      }
+    } else {
+      appWindow.size = Size((double.parse(dimensions!.last)) / 3 * 1 + 32,
+          double.parse(dimensions!.first));
+      if (items.isNotEmpty) {
+        appWindow.size = Size(
+            (double.parse(dimensions!.last)) / 3 * items.length + 32,
+            double.parse(dimensions!.first));
+      }
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        WindowTitleBar(
-          brightness: brightness,
-        ),
-        Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: items,
-        ),
-      ],
-    );
-  }
-
-  void openBrowser(String exe, List<String> args) async {
-    await Process.start(exe, args);
-    exit(0);
-  }
-}
-
-class MyHomePageH extends StatefulWidget {
-  const MyHomePageH({Key? key}) : super(key: key);
-
-  @override
-  State<MyHomePageH> createState() => _MyHomePageStateH();
-}
-
-class _MyHomePageStateH extends State<MyHomePageH> {
-  InterfaceBrightness brightness =
-      Platform.isMacOS ? InterfaceBrightness.auto : InterfaceBrightness.dark;
-  List<String>? dimensions;
-
-  @override
-  void initState() {
-    super.initState();
-    setDimensions();
-  }
-
-  Future<void> setDimensions() async {
-    final prefs = await SharedPreferences.getInstance();
-    setState(() {
-      dimensions = prefs.getStringList('dimensions');
-    });
-    appWindow.size = Size(
-      double.parse(dimensions!.last) * 1.2,
-      double.parse(dimensions!.first) * 1.2,
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        WindowTitleBar(
-          brightness: brightness,
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            BrowserItem(
-              icon: const Icon(
-                FluentIcons.cat,
-                size: 80,
-                color: Colors.white,
-              ),
-              onPressed: () => openBrowser(
-                "C:/Program Files/Mozilla Firefox/firefox.exe",
-                ["-p", "Entertainment"],
-              ),
-              text: "Entertainment",
-              fontSize: 16,
-              textColor: Colors.white,
-            ),
-            BrowserItem(
-              icon: const Icon(
-                FluentIcons.authenticator_app,
-                size: 80,
-                color: Colors.white,
-              ),
-              onPressed: () => openBrowser(
-                "C:/Program Files/Mozilla Firefox/firefox.exe",
-                ["-p", "Homework"],
-              ),
-              text: "Homework",
-              fontSize: 16,
-              textColor: Colors.white,
-            ),
-            BrowserItem(
-              icon: const Icon(
-                FluentIcons.developer_tools,
-                size: 80,
-                color: Colors.white,
-              ),
-              onPressed: () => openBrowser(
-                "C:/Program Files/Firefox Developer Edition/firefox.exe",
-                ["-p", "dev-edition-default"],
-              ),
-              text: "Dev",
-              fontSize: 16,
-              textColor: Colors.white,
-            ),
-          ],
-        ),
-      ],
-    );
+    if (orientation == main.Orientation.VERTICAL) {
+      return Column(
+        children: [
+          WindowTitleBar(
+            brightness: brightness,
+          ),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: items,
+          ),
+        ],
+      );
+    } else {
+      return Column(
+        children: [
+          WindowTitleBar(
+            brightness: brightness,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: items,
+          ),
+        ],
+      );
+    }
   }
 
   void openBrowser(String exe, List<String> args) async {
