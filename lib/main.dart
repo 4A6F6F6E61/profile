@@ -10,6 +10,8 @@ import 'settings.dart';
 import 'dart:io';
 
 AccentColor? accentColor;
+List<String>? dimensions;
+Alignment? position;
 int pos = Orientation.HORIZONTAL;
 
 class Orientation {
@@ -18,8 +20,6 @@ class Orientation {
 }
 
 Future<void> main() async {
-  final prefs = await SharedPreferences.getInstance();
-  List<String>? dimensions;
   WidgetsFlutterBinding.ensureInitialized();
   accentColor = await getColor();
   await Window.initialize();
@@ -30,28 +30,14 @@ Future<void> main() async {
   if (Platform.isWindows) {
     await Window.hideWindowControls();
   }
-  if (prefs.containsKey('dimensions')) {
-    dimensions = prefs.getStringList('dimensions');
-  } else {
-    dimensions = ["140", "450"];
-    prefs.setStringList('dimensions', dimensions);
-  }
-  if (!prefs.containsKey('orientation')) {
-    prefs.setInt('orientation', Orientation.VERTICAL);
-  } else {
-    pos = prefs.getInt('orientation')!;
-  }
-  if (!prefs.containsKey('browserProfiles')) {
-    prefs.setStringList('browserProfiles', <String>[]);
-  }
-
+  await loadPreferences();
   runApp(const MyApp());
   if (Platform.isWindows && pos == Orientation.VERTICAL) {
     var s = await getDimensionsV();
     doWhenWindowReady(() {
       appWindow
         ..minSize = s
-        ..alignment = Alignment.topRight
+        ..alignment = position
         ..show();
     });
   } else if (Platform.isWindows && pos == Orientation.HORIZONTAL) {
@@ -61,13 +47,57 @@ Future<void> main() async {
         ..minSize = s
         ..size = Size(
           double.parse(dimensions!.last) * 1.2,
-          double.parse(dimensions.first) * 1.2,
+          double.parse(dimensions!.first) * 1.2,
         )
-        ..alignment = Alignment.bottomCenter
+        ..alignment = position
         ..show();
     });
   }
-  //prefs.setString('color', "Choose a color");
+}
+
+Future<void> loadPreferences() async {
+  /* 
+   *  Load Preferences Instance
+   */
+  final prefs = await SharedPreferences.getInstance();
+  /* 
+   *  Get Dimensions
+   */
+  if (!prefs.containsKey('dimensions')) {
+    dimensions = ["140", "450"];
+    prefs.setStringList('dimensions', dimensions!);
+  } else {
+    dimensions = prefs.getStringList('dimensions');
+  }
+  /* 
+   *  Get Orientation
+   */
+  if (!prefs.containsKey('orientation')) {
+    prefs.setInt('orientation', Orientation.VERTICAL);
+  } else {
+    pos = prefs.getInt('orientation')!;
+  }
+  /* 
+   *  Set Browser Profiles
+   */
+  if (!prefs.containsKey('browserProfiles')) {
+    prefs.setStringList('browserProfiles', <String>[]);
+  }
+  /* 
+   *  Get Position
+   */
+  if (!prefs.containsKey('position')) {
+    prefs.setStringList('position', ["0.0", "1.0"]);
+  } else {
+    var p = prefs.getStringList('position');
+    position = Alignment(double.parse(p![0]), double.parse(p[1]));
+  }
+  /*
+   *  Set Accent Color
+   */
+  if (!prefs.containsKey('color')) {
+    prefs.setString('color', "Blue");
+  }
 }
 
 Future<AccentColor> getColor() async {

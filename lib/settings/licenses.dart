@@ -1,5 +1,4 @@
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:flutter/material.dart' as m;
 
 typedef PageState = Map<String, dynamic>;
 
@@ -130,24 +129,29 @@ class SettingsLicense extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return m.Card(
-      color: const Color.fromARGB(0, 0, 0, 0),
-      child: Container(
-        margin: const EdgeInsets.all(10.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              libName,
-              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            Text(license),
-          ],
+    return Column(
+      children: [
+        Card(
+          backgroundColor: const Color.fromARGB(255, 27, 27, 27),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                libName,
+                style:
+                    const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Text(license),
+            ],
+          ),
         ),
-      ),
+        const SizedBox(
+          height: 15,
+        ),
+      ],
     );
   }
 }

@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:flutter/material.dart' as m;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SettingsAddProfile extends StatefulWidget {
@@ -21,6 +20,7 @@ class _SettingsAddProfileState extends State<SettingsAddProfile> {
   String? iconComboBoxValue;
   String? iconChoose;
 
+  // ignore: prefer_final_fields
   TextEditingController _binaryInputController = TextEditingController();
 
   List<String> browserValues = const [
@@ -139,125 +139,122 @@ class _SettingsAddProfileState extends State<SettingsAddProfile> {
               const SizedBox(
                 height: 10,
               ),
-              m.Card(
-                color: const Color.fromARGB(0, 0, 0, 0),
-                child: Container(
-                  margin: const EdgeInsets.all(10.0),
-                  child: Column(
-                    children: [
-                      Row(
-                        children: [
-                          const SizedBox(
-                            width: 100.0,
-                            child: Text("Display Name:"),
-                          ),
-                          Expanded(
-                            child: TextBox(
-                              controller: TextEditingController(
-                                text: displayName,
-                              ),
-                              onChanged: (value) => displayName = value,
+              Card(
+                backgroundColor: const Color.fromARGB(255, 27, 27, 27),
+                child: Column(
+                  children: [
+                    Row(
+                      children: [
+                        const SizedBox(
+                          width: 100.0,
+                          child: Text("Display Name:"),
+                        ),
+                        Expanded(
+                          child: TextBox(
+                            controller: TextEditingController(
+                              text: displayName,
                             ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 10.0),
-                      Row(
-                        children: [
-                          const SizedBox(width: 40.0, child: Text("Icon:")),
-                          Expanded(
-                            child: Combobox<String>(
-                              placeholder:
-                                  Text(iconChoose ?? 'Choose an icon...'),
-                              items: iconValues
-                                  .map((e) => ComboboxItem<String>(
-                                        value: e,
-                                        child: Text(e),
-                                      ))
-                                  .toList(),
-                              value: iconComboBoxValue,
-                              onChanged: (value) async {
-                                // print(value);
-                                if (value != null) {
-                                  setState(() => iconComboBoxValue = value);
-                                }
-                              },
-                            ),
-                          ),
-                          const SizedBox(width: 10.0),
-                          Expanded(
-                            child: TextBox(
-                              placeholder: "Profile name",
-                              onChanged: (value) {
-                                setState(() => profileName = value);
-                              },
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 10),
-                      Row(
-                        children: [
-                          const SizedBox(width: 40.0, child: Text("Type:")),
-                          Expanded(
-                            child: Combobox<String>(
-                              placeholder:
-                                  Text(browserChoose ?? 'Choose a browser...'),
-                              items: browserValues
-                                  .map((e) => ComboboxItem<String>(
-                                        value: e,
-                                        child: Text(e),
-                                      ))
-                                  .toList(),
-                              value: browserComboBoxValue,
-                              onChanged: (value) async {
-                                // print(value);
-                                if (value != null) {
-                                  setState(() => browserComboBoxValue = value);
-                                }
-                              },
-                            ),
-                          ),
-                          const SizedBox(width: 10.0),
-                          Expanded(
-                            child: TextBox(
-                              placeholder: "Browser binary location",
-                              controller: _binaryInputController,
-                              onChanged: (value) {
-                                setState(() => binloc = value);
-                              },
-                              suffix: IconButton(
-                                onPressed: () async {
-                                  FilePickerResult? result =
-                                      await FilePicker.platform.pickFiles(
-                                    type: FileType.custom,
-                                    allowedExtensions: ['exe', 'app'],
-                                  );
-                                  if (result != null) {
-                                    binloc = result.files.single.path ?? "";
-                                    _binaryInputController.text = binloc;
-                                  } else {
-                                    // User canceled the picker
-                                  }
-                                },
-                                icon: const Icon(FluentIcons.open_file),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      Container(
-                        margin: const EdgeInsets.only(top: 10),
-                        child: SizedBox(
-                          width: double.infinity,
-                          child: Button(
-                            child: const Text('Save'),
-                            onPressed: () async => saveProfile(),
+                            onChanged: (value) => displayName = value,
                           ),
                         ),
+                      ],
+                    ),
+                    const SizedBox(height: 10.0),
+                    Row(
+                      children: [
+                        const SizedBox(width: 40.0, child: Text("Icon:")),
+                        Expanded(
+                          child: Combobox<String>(
+                            placeholder:
+                                Text(iconChoose ?? 'Choose an icon...'),
+                            items: iconValues
+                                .map((e) => ComboboxItem<String>(
+                                      value: e,
+                                      child: Text(e),
+                                    ))
+                                .toList(),
+                            value: iconComboBoxValue,
+                            onChanged: (value) async {
+                              // print(value);
+                              if (value != null) {
+                                setState(() => iconComboBoxValue = value);
+                              }
+                            },
+                          ),
+                        ),
+                        const SizedBox(width: 10.0),
+                        Expanded(
+                          child: TextBox(
+                            placeholder: "Profile name",
+                            onChanged: (value) {
+                              setState(() => profileName = value);
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 10),
+                    Row(
+                      children: [
+                        const SizedBox(width: 40.0, child: Text("Type:")),
+                        Expanded(
+                          child: Combobox<String>(
+                            placeholder:
+                                Text(browserChoose ?? 'Choose a browser...'),
+                            items: browserValues
+                                .map((e) => ComboboxItem<String>(
+                                      value: e,
+                                      child: Text(e),
+                                    ))
+                                .toList(),
+                            value: browserComboBoxValue,
+                            onChanged: (value) async {
+                              // print(value);
+                              if (value != null) {
+                                setState(() => browserComboBoxValue = value);
+                              }
+                            },
+                          ),
+                        ),
+                        const SizedBox(width: 10.0),
+                        Expanded(
+                          child: TextBox(
+                            placeholder: "Browser binary location",
+                            controller: _binaryInputController,
+                            onChanged: (value) {
+                              setState(() => binloc = value);
+                            },
+                            suffix: IconButton(
+                              onPressed: () async {
+                                FilePickerResult? result =
+                                    await FilePicker.platform.pickFiles(
+                                  type: FileType.custom,
+                                  allowedExtensions: ['exe', 'app'],
+                                );
+                                if (result != null) {
+                                  binloc = result.files.single.path ?? "";
+                                  _binaryInputController.text = binloc;
+                                } else {
+                                  // User canceled the picker
+                                }
+                              },
+                              icon: const Icon(FluentIcons.open_file),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Container(
+                      margin: const EdgeInsets.only(top: 10),
+                      child: SizedBox(
+                        width: double.infinity,
+                        child: Button(
+                          child: const Text('Save'),
+                          onPressed: () async => saveProfile(),
+                        ),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
             ],
