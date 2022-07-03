@@ -6,7 +6,10 @@ import 'dart:io';
 
 class WindowTitleBar extends StatelessWidget {
   final InterfaceBrightness brightness;
-  const WindowTitleBar({Key? key, required this.brightness}) : super(key: key);
+  final bool darkMode;
+  const WindowTitleBar(
+      {Key? key, required this.brightness, required this.darkMode})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {

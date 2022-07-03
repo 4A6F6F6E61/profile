@@ -10,6 +10,7 @@ import 'settings.dart';
 import 'dart:io';
 
 AccentColor? accentColor;
+bool? darkMode;
 List<String>? dimensions;
 Alignment? position;
 int pos = Orientation.HORIZONTAL;
@@ -20,17 +21,17 @@ class Orientation {
 }
 
 Future<void> main() async {
+  await loadPreferences();
   WidgetsFlutterBinding.ensureInitialized();
   accentColor = await getColor();
   await Window.initialize();
   await Window.setEffect(
     effect: WindowEffect.acrylic,
-    color: const Color(0xCC222222),
+    color: darkMode! ? const Color(0xCC222222) : const Color(0xCCDDDDDD),
   );
   if (Platform.isWindows) {
     await Window.hideWindowControls();
   }
-  await loadPreferences();
   runApp(const MyApp());
   if (Platform.isWindows && pos == Orientation.VERTICAL) {
     var s = await getDimensionsV();
@@ -97,6 +98,14 @@ Future<void> loadPreferences() async {
    */
   if (!prefs.containsKey('color')) {
     prefs.setString('color', "Blue");
+  }
+  /* 
+   *  Set Dark Mode
+   */
+  if (!prefs.containsKey('darkMode')) {
+    prefs.setBool('darkMode', true);
+  } else {
+    darkMode = prefs.getBool('darkMode')!;
   }
 }
 
@@ -170,11 +179,11 @@ class MyApp extends StatelessWidget {
       title: 'Profile Switcher',
       theme: ThemeData(
         accentColor: accentColor,
-        brightness: Brightness.dark,
+        brightness: darkMode! ? Brightness.dark : Brightness.light,
       ),
       routes: {
-        '/': (context) => MyHomePage(orientation: pos),
-        '/settings': (context) => const SettingsNav(),
+        '/': (context) => MyHomePage(orientation: pos, darkMode: darkMode!),
+        '/settings': (context) => SettingsNav(darkMode: darkMode!),
       },
     );
   }

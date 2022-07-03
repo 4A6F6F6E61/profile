@@ -11,15 +11,20 @@ import 'dart:io';
 
 class MyHomePage extends StatefulWidget {
   final int orientation;
-  const MyHomePage({Key? key, required this.orientation}) : super(key: key);
+  final bool darkMode;
+  const MyHomePage(
+      {Key? key, required this.orientation, required this.darkMode})
+      : super(key: key);
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState(orientation: orientation);
+  State<MyHomePage> createState() =>
+      _MyHomePageState(orientation: orientation, darkMode: darkMode);
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  _MyHomePageState({required this.orientation});
-  int orientation;
+  _MyHomePageState({required this.orientation, required this.darkMode});
+  final int orientation;
+  final bool darkMode;
   InterfaceBrightness brightness =
       Platform.isMacOS ? InterfaceBrightness.auto : InterfaceBrightness.dark;
   List<String>? dimensions;
@@ -125,6 +130,7 @@ class _MyHomePageState extends State<MyHomePage> {
         children: [
           WindowTitleBar(
             brightness: brightness,
+            darkMode: darkMode,
           ),
           Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -137,6 +143,7 @@ class _MyHomePageState extends State<MyHomePage> {
         children: [
           WindowTitleBar(
             brightness: brightness,
+            darkMode: darkMode,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,

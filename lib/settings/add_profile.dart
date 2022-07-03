@@ -1,3 +1,5 @@
+// ignore_for_file: no_logic_in_create_state
+
 import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
@@ -5,10 +7,13 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SettingsAddProfile extends StatefulWidget {
-  const SettingsAddProfile({Key? key}) : super(key: key);
+  final bool darkMode;
+  const SettingsAddProfile({Key? key, required this.darkMode})
+      : super(key: key);
 
   @override
-  State<SettingsAddProfile> createState() => _SettingsAddProfileState();
+  State<SettingsAddProfile> createState() =>
+      _SettingsAddProfileState(darkMode: darkMode);
 }
 
 class _SettingsAddProfileState extends State<SettingsAddProfile> {
@@ -37,6 +42,11 @@ class _SettingsAddProfileState extends State<SettingsAddProfile> {
   String displayName = "";
 
   String? resultdialog = "";
+
+  final bool darkMode;
+
+  @override
+  _SettingsAddProfileState({required this.darkMode});
 
   void showContentDialog(BuildContext context, String error,
       {bool iserror = true}) async {
@@ -140,7 +150,9 @@ class _SettingsAddProfileState extends State<SettingsAddProfile> {
                 height: 10,
               ),
               Card(
-                backgroundColor: const Color.fromARGB(255, 27, 27, 27),
+                backgroundColor: darkMode
+                    ? const Color.fromARGB(255, 27, 27, 27)
+                    : const Color.fromARGB(255, 245, 245, 245),
                 child: Column(
                   children: [
                     Row(

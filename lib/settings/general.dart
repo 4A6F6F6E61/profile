@@ -1,13 +1,17 @@
+// ignore_for_file: no_logic_in_create_state
+
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../main.dart' as m;
 
 class SettingsGeneral extends StatefulWidget {
-  const SettingsGeneral({Key? key}) : super(key: key);
+  final bool darkMode;
+  const SettingsGeneral({Key? key, required this.darkMode}) : super(key: key);
 
   @override
-  State<SettingsGeneral> createState() => _SettingsGeneralState();
+  State<SettingsGeneral> createState() =>
+      _SettingsGeneralState(darkMode: darkMode);
 }
 
 class _SettingsGeneralState extends State<SettingsGeneral> {
@@ -35,18 +39,57 @@ class _SettingsGeneralState extends State<SettingsGeneral> {
   String? orientationValue;
   String? settingsOriantation = '...';
 
+  List<String> themeList = const ["Light", "Dark"];
+  String? themeValue;
+  String? settingsTheme = '...';
+
+  final bool darkMode;
+
+  @override
+  _SettingsGeneralState({required this.darkMode});
+
   @override
   void initState() {
-    load();
     super.initState();
+    load();
   }
 
   void load() async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
-      settingsColor = prefs.getString('color');
-      settingsPositionX = prefs.getString('position')![0];
-      settingsPositionY = prefs.getString('position')![1];
+      colorListValue = prefs.getString('color');
+      switch (prefs.getStringList('position')![1]) {
+        case "-1.0":
+          positionYValue = "top";
+          break;
+        case "0.0":
+          positionYValue = "center";
+          break;
+        case "1.0":
+          positionYValue = "bottom";
+          break;
+      }
+      switch (prefs.getStringList('position')![0]) {
+        case "-1.0":
+          positionXValue = "left";
+          break;
+        case "0.0":
+          positionXValue = "center";
+          break;
+        case "1.0":
+          positionXValue = "right";
+          break;
+      }
+      if (prefs.getBool('darkMode')!) {
+        themeValue = "Dark";
+      } else {
+        themeValue = "Light";
+      }
+      if (prefs.getInt('orientation')! == m.Orientation.VERTICAL) {
+        orientationValue = "Vertical";
+      } else {
+        orientationValue = "Horizontal";
+      }
     });
   }
 
@@ -57,7 +100,9 @@ class _SettingsGeneralState extends State<SettingsGeneral> {
       child: ScaffoldPage.scrollable(
         children: [
           Card(
-            backgroundColor: const Color.fromARGB(255, 27, 27, 27),
+            backgroundColor: darkMode
+                ? const Color.fromARGB(255, 27, 27, 27)
+                : const Color.fromARGB(255, 245, 245, 245),
             child: Row(
               children: [
                 const Expanded(
@@ -93,49 +138,14 @@ class _SettingsGeneralState extends State<SettingsGeneral> {
           ),
           const SizedBox(height: 15.0),
           Card(
-            backgroundColor: const Color.fromARGB(255, 27, 27, 27),
+            backgroundColor: darkMode
+                ? const Color.fromARGB(255, 27, 27, 27)
+                : const Color.fromARGB(255, 245, 245, 245),
             child: Row(
               children: [
                 const Expanded(
                   child: Text("Change the position"),
                 ),
-                Expanded(
-                  child: SizedBox(
-                    width: 200,
-                    child: Combobox<String>(
-                      placeholder: Text(settingsPositionX ?? 'Loading...'),
-                      items: positionXList
-                          .map((e) => ComboboxItem<String>(
-                                value: e,
-                                child: Text(e),
-                              ))
-                          .toList(),
-                      value: positionXValue,
-                      onChanged: (value) async {
-                        // print(value);
-                        if (value != null) {
-                          setState(() => positionXValue = value);
-                          final prefs = await SharedPreferences.getInstance();
-                          var pos = prefs.getStringList('position');
-                          switch (value) {
-                            case "left":
-                              pos![0] = "-1.0";
-                              break;
-                            case "center":
-                              pos![0] = "0.0";
-                              break;
-                            case "right":
-                              pos![0] = "1.0";
-                              break;
-                          }
-                          prefs.setStringList('position', pos!);
-                          setState(() => settingsPositionX = value);
-                        }
-                      },
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 10),
                 Expanded(
                   child: SizedBox(
                     width: 200,
@@ -172,12 +182,51 @@ class _SettingsGeneralState extends State<SettingsGeneral> {
                     ),
                   ),
                 ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: SizedBox(
+                    width: 200,
+                    child: Combobox<String>(
+                      placeholder: Text(settingsPositionX ?? 'Loading...'),
+                      items: positionXList
+                          .map((e) => ComboboxItem<String>(
+                                value: e,
+                                child: Text(e),
+                              ))
+                          .toList(),
+                      value: positionXValue,
+                      onChanged: (value) async {
+                        // print(value);
+                        if (value != null) {
+                          setState(() => positionXValue = value);
+                          final prefs = await SharedPreferences.getInstance();
+                          var pos = prefs.getStringList('position');
+                          switch (value) {
+                            case "left":
+                              pos![0] = "-1.0";
+                              break;
+                            case "center":
+                              pos![0] = "0.0";
+                              break;
+                            case "right":
+                              pos![0] = "1.0";
+                              break;
+                          }
+                          prefs.setStringList('position', pos!);
+                          setState(() => settingsPositionX = value);
+                        }
+                      },
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
           const SizedBox(height: 15.0),
           Card(
-            backgroundColor: const Color.fromARGB(255, 27, 27, 27),
+            backgroundColor: darkMode
+                ? const Color.fromARGB(255, 27, 27, 27)
+                : const Color.fromARGB(255, 245, 245, 245),
             child: Row(
               children: [
                 const Expanded(
@@ -211,6 +260,47 @@ class _SettingsGeneralState extends State<SettingsGeneral> {
                               break;
                           }
                           setState(() => settingsOriantation = value);
+                        }
+                      },
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 15.0),
+          Card(
+            backgroundColor: darkMode
+                ? const Color.fromARGB(255, 27, 27, 27)
+                : const Color.fromARGB(255, 245, 245, 245),
+            child: Row(
+              children: [
+                const Expanded(
+                  child: Text("Change the theme"),
+                ),
+                Expanded(
+                  child: SizedBox(
+                    width: 200,
+                    child: Combobox<String>(
+                      placeholder: Text(settingsTheme ?? 'Loading...'),
+                      items: themeList
+                          .map((e) => ComboboxItem<String>(
+                                value: e,
+                                child: Text(e),
+                              ))
+                          .toList(),
+                      value: themeValue,
+                      onChanged: (value) async {
+                        // print(value);
+                        if (value != null) {
+                          setState(() => themeValue = value);
+                          final prefs = await SharedPreferences.getInstance();
+                          if (value == "Dark") {
+                            prefs.setBool('darkMode', true);
+                          } else {
+                            prefs.setBool('darkMode', false);
+                          }
+                          setState(() => settingsTheme = value);
                         }
                       },
                     ),

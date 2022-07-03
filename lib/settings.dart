@@ -1,3 +1,5 @@
+// ignore_for_file: no_logic_in_create_state
+
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:profile/interface_brightness.dart';
 import 'package:bitsdojo_window/bitsdojo_window.dart';
@@ -9,10 +11,11 @@ import 'settings/licenses.dart';
 import 'settings/about.dart';
 
 class SettingsNav extends StatefulWidget {
-  const SettingsNav({Key? key}) : super(key: key);
+  final bool darkMode;
+  const SettingsNav({Key? key, required this.darkMode}) : super(key: key);
 
   @override
-  State<SettingsNav> createState() => _SettingsNavState();
+  State<SettingsNav> createState() => _SettingsNavState(darkMode: darkMode);
 }
 
 class _SettingsNavState extends State<SettingsNav> {
@@ -20,7 +23,10 @@ class _SettingsNavState extends State<SettingsNav> {
   String? comboBoxValue;
   bool value = false;
   int index = 0;
+  final bool darkMode;
 
+  @override
+  _SettingsNavState({required this.darkMode});
   @override
   void initState() {
     super.initState();
@@ -90,11 +96,11 @@ class _SettingsNavState extends State<SettingsNav> {
           ),
         ],
       ),
-      content: NavigationBody(index: index, children: const [
-        SettingsGeneral(),
-        SettingsAddProfile(),
-        SettingsLicenses(),
-        SettingsAbout(),
+      content: NavigationBody(index: index, children: [
+        SettingsGeneral(darkMode: darkMode),
+        SettingsAddProfile(darkMode: darkMode),
+        SettingsLicenses(darkMode: darkMode),
+        const SettingsAbout(),
       ]),
     );
   }
