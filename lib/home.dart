@@ -155,7 +155,22 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void openBrowser(String exe, List<String> args) async {
-    await Process.start(exe, args);
-    exit(0);
+    if (Platform.isWindows) {
+      await Process.start(exe, args);
+    } else {
+      var split = exe.split('/');
+      String binLoc = "";
+      for (int i = 0; i < split.length; i++) {
+        if (i == split.length-2) {
+          binLoc += split[i];
+        } else if (i != split.length-1) {
+          binLoc += split[i] + '/';
+        }
+      }
+      String binName = split.last.replaceAll('.desktop', '');
+      print("\nbinloc: $binLoc\nbinname: $binName");
+      await Process.start(binName, args, workingDirectory: binLoc);
+    }
+    //exit(0);
   }
 }

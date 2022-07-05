@@ -21,7 +21,7 @@ class _SettingsGeneralState extends State<SettingsGeneral> {
     "yellow",
     "green",
     "teal",
-    "blue",
+    "Blue",
     "purple"
   ];
   String? colorListValue;

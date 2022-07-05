@@ -26,14 +26,14 @@ Future<void> main() async {
   accentColor = await getColor();
   await Window.initialize();
   await Window.setEffect(
-    effect: WindowEffect.acrylic,
+    effect: WindowEffect.transparent,
     color: darkMode! ? const Color(0xCC222222) : const Color(0xCCDDDDDD),
   );
   if (Platform.isWindows) {
     await Window.hideWindowControls();
   }
   runApp(const MyApp());
-  if (Platform.isWindows && pos == Orientation.VERTICAL) {
+  if (pos == Orientation.VERTICAL) {
     var s = await getDimensionsV();
     doWhenWindowReady(() {
       appWindow
@@ -41,7 +41,7 @@ Future<void> main() async {
         ..alignment = position
         ..show();
     });
-  } else if (Platform.isWindows && pos == Orientation.HORIZONTAL) {
+  } else if (pos == Orientation.HORIZONTAL) {
     var s = await getDimensionsH();
     doWhenWindowReady(() {
       appWindow
@@ -82,7 +82,15 @@ Future<void> loadPreferences() async {
    *  Set Browser Profiles
    */
   if (!prefs.containsKey('browserProfiles')) {
-    prefs.setStringList('browserProfiles', <String>[]);
+    prefs.setStringList('browserProfiles', <String>["Entertainment"]);
+    prefs.setStringList('Entertainment', <String>[
+      "Cat",
+      "80",
+      "/usr/share/applications/firefox.desktop",
+      "-p",
+      "Entertainment",
+      "Entertainment",
+    ]);
   }
   /* 
    *  Get Position

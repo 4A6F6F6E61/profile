@@ -238,10 +238,18 @@ class _SettingsAddProfileState extends State<SettingsAddProfile> {
                             },
                             suffix: IconButton(
                               onPressed: () async {
+                                var fext = 'exe';
+                                if (Platform.isWindows) {
+                                  fext = 'exe';
+                                } else if (Platform.isMacOS) {
+                                  fext = 'app';
+                                } else if (Platform.isLinux) {
+                                  fext = 'desktop';
+                                }
                                 FilePickerResult? result =
                                     await FilePicker.platform.pickFiles(
                                   type: FileType.custom,
-                                  allowedExtensions: ['exe', 'app'],
+                                  allowedExtensions: [fext],
                                 );
                                 if (result != null) {
                                   binloc = result.files.single.path ?? "";

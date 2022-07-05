@@ -13,8 +13,8 @@ class WindowTitleBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Platform.isWindows
-        ? Container(
+    //return Platform.isWindows ?
+    return Container(
             width: MediaQuery.of(context).size.width,
             height: 32.0,
             color: Colors.transparent,
@@ -101,8 +101,8 @@ class WindowTitleBar extends StatelessWidget {
                 ],
               ),
             ),
-          )
-        : Container();
+          );
+//        : Container();
   }
 }
 
@@ -112,8 +112,8 @@ class TitleBarButtons extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Platform.isWindows
-        ? Row(
+    //return Platform.isWindows ?
+    return Row(
             children: [
               MinimizeWindowButton(
                 colors: WindowButtonColors(
@@ -189,7 +189,7 @@ class TitleBarButtons extends StatelessWidget {
                 ),
               ),
             ],
-          )
-        : Container();
+          );
+//        : Container();
   }
 }
