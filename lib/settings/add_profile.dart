@@ -244,7 +244,7 @@ class _SettingsAddProfileState extends State<SettingsAddProfile> {
                                 } else if (Platform.isMacOS) {
                                   fext = 'app';
                                 } else if (Platform.isLinux) {
-                                  fext = 'desktop';
+                                  fext = '*';
                                 }
                                 FilePickerResult? result =
                                     await FilePicker.platform.pickFiles(
