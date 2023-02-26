@@ -1,20 +1,16 @@
-# profile
+# browser_manager
 
-This is a Browser manager made with Flutter for Windows, MacOS and Linux.
-It supports all major browsers like Firefox, Chrome, Edge etc.
+A new Flutter project.
 
-## Supported Browser
+## Getting Started
 
-|        | Firefox | Chrome | Brave | Opera | Edge
-|--------|:-------:|:------:|:-----:|:-----:|:----:
-|Windows | ✓      | ✓     | ✓    | ✓    | ✓
-|Linux   | ✓      | ✓     | ✓    | ✓    | ✓
-|MacOS   | ?       | ?      | ?     | ?     | ?
+This project is a starting point for a Flutter application.
 
-## Screenshots
+A few resources to get you started if this is your first Flutter project:
 
-WIP
+- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
+- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
 
-## Downloads
-
-You can download all major versions [here](https://github.com/4A6F6F6E61/profile/tags).
+For help getting started with Flutter development, view the
+[online documentation](https://docs.flutter.dev/), which offers tutorials,
+samples, guidance on mobile development, and a full API reference.

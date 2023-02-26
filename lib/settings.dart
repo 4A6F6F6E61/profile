@@ -1,9 +1,8 @@
 // ignore_for_file: no_logic_in_create_state
 
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:profile/interface_brightness.dart';
+import 'package:browser_manager/interface_brightness.dart';
 import 'package:bitsdojo_window/bitsdojo_window.dart';
-
 import 'window_title_bar.dart';
 import 'settings/general.dart';
 import 'settings/add_profile.dart';
@@ -81,27 +80,25 @@ class _SettingsNavState extends State<SettingsNav> {
           PaneItem(
             icon: const Icon(FluentIcons.settings),
             title: const Text('General'),
+            body: SettingsGeneral(darkMode: darkMode),
           ),
           PaneItem(
             icon: const Icon(FluentIcons.add),
             title: const Text('Add Browser Profile'),
+            body: SettingsAddProfile(darkMode: darkMode),
           ),
           PaneItem(
             icon: const Icon(FluentIcons.library),
             title: const Text('Licenses'),
+            body: SettingsLicenses(darkMode: darkMode),
           ),
           PaneItem(
             icon: const Icon(FluentIcons.info),
             title: const Text('About'),
+            body: const SettingsAbout(),
           ),
         ],
       ),
-      content: NavigationBody(index: index, children: [
-        SettingsGeneral(darkMode: darkMode),
-        SettingsAddProfile(darkMode: darkMode),
-        SettingsLicenses(darkMode: darkMode),
-        const SettingsAbout(),
-      ]),
     );
   }
 }

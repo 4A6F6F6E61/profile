@@ -1,6 +1,6 @@
 {
-    "name": "profile",
-    "short_name": "profile",
+    "name": "browser_manager",
+    "short_name": "browser_manager",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

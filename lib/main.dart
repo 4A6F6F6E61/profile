@@ -81,17 +81,17 @@ Future<void> loadPreferences() async {
   /* 
    *  Set Browser Profiles
    */
-  if (!prefs.containsKey('browserProfiles')) {
-    prefs.setStringList('browserProfiles', <String>["Entertainment"]);
-    prefs.setStringList('Entertainment', <String>[
-      "Cat",
-      "80",
-      "/usr/share/applications/firefox.desktop",
-      "-p",
-      "Entertainment",
-      "Entertainment",
-    ]);
-  }
+  // if (!prefs.containsKey('browserProfiles')) {
+  //   prefs.setStringList('browserProfiles', <String>["Entertainment"]);
+  //   prefs.setStringList('Entertainment', <String>[
+  //     "Cat",
+  //     "80",
+  //     "C:/Program Files/Mozilla Firefox/firefox.exe",
+  //     "-p",
+  //     "default-release",
+  //     "Entertainment",
+  //   ]);
+  // }
   /* 
    *  Get Position
    */

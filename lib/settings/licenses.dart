@@ -9,13 +9,11 @@ class SettingsLicenses extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: const Color.fromARGB(255, 32, 32, 32),
-      child: ScaffoldPage.scrollable(
-        children: [
-          SettingsLicense(
-              libName: "Flutter Acrylic",
-              license: """
+    return ScaffoldPage.scrollable(
+      children: [
+        SettingsLicense(
+            libName: "Flutter Acrylic",
+            license: """
 MIT License
 
 Copyright (c) 2021 Hitesh Kumar Saini
@@ -37,10 +35,10 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.""",
-              darkMode: darkMode),
-          SettingsLicense(
-              libName: "Desktop Window",
-              license: """
+            darkMode: darkMode),
+        SettingsLicense(
+            libName: "Desktop Window",
+            license: """
 The MIT License (MIT)
 
 Copyright (c) 2020-2021 ChunKoo Park
@@ -62,10 +60,10 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.""",
-              darkMode: darkMode),
-          SettingsLicense(
-              libName: "Bitsdojo Window",
-              license: """
+            darkMode: darkMode),
+        SettingsLicense(
+            libName: "Bitsdojo Window",
+            license: """
 MIT License
 
 Copyright (c) 2020-2021 Bogdan Hobeanu
@@ -87,10 +85,10 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.""",
-              darkMode: darkMode),
-          SettingsLicense(
-              libName: "Flutter File Picker",
-              license: """
+            darkMode: darkMode),
+        SettingsLicense(
+            libName: "Flutter File Picker",
+            license: """
 MIT License
 
 Copyright (c) 2018 Miguel Ruivo
@@ -112,10 +110,10 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.""",
-              darkMode: darkMode),
-          SettingsLicense(
-              libName: "Fluent UI",
-              license: """
+            darkMode: darkMode),
+        SettingsLicense(
+            libName: "Fluent UI",
+            license: """
 Copyright 2020 Bruno D'Luka
 
 Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
@@ -127,9 +125,8 @@ Redistribution and use in source and binary forms, with or without modification,
 3. Neither the name of the copyright holder nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
 
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.""",
-              darkMode: darkMode),
-        ],
-      ),
+            darkMode: darkMode),
+      ],
     );
   }
 }

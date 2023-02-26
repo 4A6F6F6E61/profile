@@ -176,11 +176,11 @@ class _SettingsAddProfileState extends State<SettingsAddProfile> {
                       children: [
                         const SizedBox(width: 40.0, child: Text("Icon:")),
                         Expanded(
-                          child: Combobox<String>(
+                          child: ComboBox<String>(
                             placeholder:
                                 Text(iconChoose ?? 'Choose an icon...'),
                             items: iconValues
-                                .map((e) => ComboboxItem<String>(
+                                .map((e) => ComboBoxItem<String>(
                                       value: e,
                                       child: Text(e),
                                     ))
@@ -210,11 +210,11 @@ class _SettingsAddProfileState extends State<SettingsAddProfile> {
                       children: [
                         const SizedBox(width: 40.0, child: Text("Type:")),
                         Expanded(
-                          child: Combobox<String>(
+                          child: ComboBox<String>(
                             placeholder:
                                 Text(browserChoose ?? 'Choose a browser...'),
                             items: browserValues
-                                .map((e) => ComboboxItem<String>(
+                                .map((e) => ComboBoxItem<String>(
                                       value: e,
                                       child: Text(e),
                                     ))
