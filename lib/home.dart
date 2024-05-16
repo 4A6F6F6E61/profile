@@ -12,13 +12,10 @@ import 'dart:io';
 class MyHomePage extends StatefulWidget {
   final int orientation;
   final bool darkMode;
-  const MyHomePage(
-      {Key? key, required this.orientation, required this.darkMode})
-      : super(key: key);
+  const MyHomePage({Key? key, required this.orientation, required this.darkMode}) : super(key: key);
 
   @override
-  State<MyHomePage> createState() =>
-      _MyHomePageState(orientation: orientation, darkMode: darkMode);
+  State<MyHomePage> createState() => _MyHomePageState(orientation: orientation, darkMode: darkMode);
 }
 
 class _MyHomePageState extends State<MyHomePage> {
@@ -43,8 +40,7 @@ class _MyHomePageState extends State<MyHomePage> {
     await getBrowserItemStrings();
     if (browserItemStrings.isNotEmpty) {
       for (List<String> bis in browserItemStrings) {
-        items.add(generateBrowserItem(
-            bis[0], bis[1], bis[2], bis[3], bis[4], bis[5]));
+        items.add(generateBrowserItem(bis[0], bis[1], bis[2], bis[3], bis[4], bis[5]));
       }
     }
     await setDimensions();
@@ -62,8 +58,8 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
-  BrowserItem generateBrowserItem(String iconName, String iconSize,
-      String browserBinLoc, String arg1, String arg2, String text) {
+  BrowserItem generateBrowserItem(String iconName, String iconSize, String browserBinLoc,
+      String arg1, String arg2, String text) {
     IconData icon = FluentIcons.cat;
     switch (iconName) {
       case "Cat":
@@ -106,18 +102,17 @@ class _MyHomePageState extends State<MyHomePage> {
       dimensions = prefs.getStringList('dimensions');
     });
     if (orientation == main.Orientation.VERTICAL) {
-      appWindow.size = Size(double.parse(dimensions!.first),
-          (double.parse(dimensions!.last) - 32) / 3 * 1 + 32);
+      appWindow.size = Size(
+          double.parse(dimensions!.first) + 20, (double.parse(dimensions!.last) - 32) / 3 * 1 + 32);
       if (items.isNotEmpty) {
         appWindow.size = Size(double.parse(dimensions!.first),
             (double.parse(dimensions!.last) - 32) / 3 * items.length + 32);
       }
     } else {
-      appWindow.size = Size((double.parse(dimensions!.last)) / 3 * 1 + 32,
-          double.parse(dimensions!.first));
+      appWindow.size =
+          Size((double.parse(dimensions!.last)) / 3 * 1 + 32, double.parse(dimensions!.first));
       if (items.isNotEmpty) {
-        appWindow.size = Size(
-            (double.parse(dimensions!.last)) / 3 * items.length + 32,
+        appWindow.size = Size((double.parse(dimensions!.last)) / 3 * items.length + 32,
             double.parse(dimensions!.first));
       }
     }

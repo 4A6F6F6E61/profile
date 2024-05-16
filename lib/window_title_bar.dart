@@ -7,8 +7,7 @@ import 'dart:io';
 class WindowTitleBar extends StatelessWidget {
   final InterfaceBrightness brightness;
   final bool darkMode;
-  const WindowTitleBar(
-      {Key? key, required this.brightness, required this.darkMode})
+  const WindowTitleBar({Key? key, required this.brightness, required this.darkMode})
       : super(key: key);
 
   @override
@@ -27,15 +26,11 @@ class WindowTitleBar extends StatelessWidget {
             ),
             MinimizeWindowButton(
               colors: WindowButtonColors(
-                iconNormal: brightness == InterfaceBrightness.light
-                    ? Colors.black
-                    : Colors.white,
-                iconMouseDown: brightness == InterfaceBrightness.light
-                    ? Colors.black
-                    : Colors.white,
-                iconMouseOver: brightness == InterfaceBrightness.light
-                    ? Colors.black
-                    : Colors.white,
+                iconNormal: brightness == InterfaceBrightness.light ? Colors.black : Colors.white,
+                iconMouseDown:
+                    brightness == InterfaceBrightness.light ? Colors.black : Colors.white,
+                iconMouseOver:
+                    brightness == InterfaceBrightness.light ? Colors.black : Colors.white,
                 normal: Colors.transparent,
                 mouseOver: brightness == InterfaceBrightness.light
                     ? Colors.black.withOpacity(0.04)
@@ -47,15 +42,11 @@ class WindowTitleBar extends StatelessWidget {
             ),
             SettingsWindowButton(
               colors: WindowButtonColors(
-                iconNormal: brightness == InterfaceBrightness.light
-                    ? Colors.black
-                    : Colors.white,
-                iconMouseDown: brightness == InterfaceBrightness.light
-                    ? Colors.black
-                    : Colors.white,
-                iconMouseOver: brightness == InterfaceBrightness.light
-                    ? Colors.black
-                    : Colors.white,
+                iconNormal: brightness == InterfaceBrightness.light ? Colors.black : Colors.white,
+                iconMouseDown:
+                    brightness == InterfaceBrightness.light ? Colors.black : Colors.white,
+                iconMouseOver:
+                    brightness == InterfaceBrightness.light ? Colors.black : Colors.white,
                 normal: Colors.transparent,
                 mouseOver: brightness == InterfaceBrightness.light
                     ? Colors.black.withOpacity(0.04)
@@ -80,15 +71,11 @@ class WindowTitleBar extends StatelessWidget {
                 exit(0);
               },
               colors: WindowButtonColors(
-                iconNormal: brightness == InterfaceBrightness.light
-                    ? Colors.black
-                    : Colors.white,
-                iconMouseDown: brightness == InterfaceBrightness.light
-                    ? Colors.black
-                    : Colors.white,
-                iconMouseOver: brightness == InterfaceBrightness.light
-                    ? Colors.black
-                    : Colors.white,
+                iconNormal: brightness == InterfaceBrightness.light ? Colors.black : Colors.white,
+                iconMouseDown:
+                    brightness == InterfaceBrightness.light ? Colors.black : Colors.white,
+                iconMouseOver:
+                    brightness == InterfaceBrightness.light ? Colors.black : Colors.white,
                 normal: Colors.transparent,
                 mouseOver: brightness == InterfaceBrightness.light
                     ? Colors.black.withOpacity(0.04)
@@ -117,15 +104,9 @@ class TitleBarButtons extends StatelessWidget {
       children: [
         MinimizeWindowButton(
           colors: WindowButtonColors(
-            iconNormal: brightness == InterfaceBrightness.light
-                ? Colors.black
-                : Colors.white,
-            iconMouseDown: brightness == InterfaceBrightness.light
-                ? Colors.black
-                : Colors.white,
-            iconMouseOver: brightness == InterfaceBrightness.light
-                ? Colors.black
-                : Colors.white,
+            iconNormal: brightness == InterfaceBrightness.light ? Colors.black : Colors.white,
+            iconMouseDown: brightness == InterfaceBrightness.light ? Colors.black : Colors.white,
+            iconMouseOver: brightness == InterfaceBrightness.light ? Colors.black : Colors.white,
             normal: Colors.transparent,
             mouseOver: brightness == InterfaceBrightness.light
                 ? Colors.black.withOpacity(0.04)
@@ -137,15 +118,9 @@ class TitleBarButtons extends StatelessWidget {
         ),
         SettingsWindowButton(
           colors: WindowButtonColors(
-            iconNormal: brightness == InterfaceBrightness.light
-                ? Colors.black
-                : Colors.white,
-            iconMouseDown: brightness == InterfaceBrightness.light
-                ? Colors.black
-                : Colors.white,
-            iconMouseOver: brightness == InterfaceBrightness.light
-                ? Colors.black
-                : Colors.white,
+            iconNormal: brightness == InterfaceBrightness.light ? Colors.black : Colors.white,
+            iconMouseDown: brightness == InterfaceBrightness.light ? Colors.black : Colors.white,
+            iconMouseOver: brightness == InterfaceBrightness.light ? Colors.black : Colors.white,
             normal: Colors.transparent,
             mouseOver: brightness == InterfaceBrightness.light
                 ? Colors.black.withOpacity(0.04)
@@ -170,15 +145,9 @@ class TitleBarButtons extends StatelessWidget {
             exit(0);
           },
           colors: WindowButtonColors(
-            iconNormal: brightness == InterfaceBrightness.light
-                ? Colors.black
-                : Colors.white,
-            iconMouseDown: brightness == InterfaceBrightness.light
-                ? Colors.black
-                : Colors.white,
-            iconMouseOver: brightness == InterfaceBrightness.light
-                ? Colors.black
-                : Colors.white,
+            iconNormal: brightness == InterfaceBrightness.light ? Colors.black : Colors.white,
+            iconMouseDown: brightness == InterfaceBrightness.light ? Colors.black : Colors.white,
+            iconMouseOver: brightness == InterfaceBrightness.light ? Colors.black : Colors.white,
             normal: Colors.transparent,
             mouseOver: brightness == InterfaceBrightness.light
                 ? Colors.black.withOpacity(0.04)

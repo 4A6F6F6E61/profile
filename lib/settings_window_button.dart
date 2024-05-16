@@ -16,7 +16,7 @@ class SettingsWindowButton extends WindowButton {
             color: buttonContext.iconColor,
             size: 13,
           ),
-          onPressed: onPressed ?? () => settingsButtonOnPressed(),
+          onPressed: onPressed ?? settingsButtonOnPressed,
         );
 }
 

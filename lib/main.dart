@@ -25,9 +25,15 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   accentColor = await getColor();
   await Window.initialize();
+  WindowEffect windowEffect = Platform.isWindows ? WindowEffect.mica : WindowEffect.transparent;
+  Color windowColor = darkMode!
+      ? Platform.isWindows
+          ? const Color(0x00000000)
+          : const Color(0xCC222222)
+      : const Color(0xCCDDDDDD);
   await Window.setEffect(
-    effect: WindowEffect.transparent,
-    color: darkMode! ? const Color(0xCC222222) : const Color(0xCCDDDDDD),
+    effect: windowEffect,
+    color: windowColor,
   );
   if (Platform.isWindows) {
     await Window.hideWindowControls();
@@ -78,20 +84,7 @@ Future<void> loadPreferences() async {
   } else {
     pos = prefs.getInt('orientation')!;
   }
-  /* 
-   *  Set Browser Profiles
-   */
-  // if (!prefs.containsKey('browserProfiles')) {
-  //   prefs.setStringList('browserProfiles', <String>["Entertainment"]);
-  //   prefs.setStringList('Entertainment', <String>[
-  //     "Cat",
-  //     "80",
-  //     "C:/Program Files/Mozilla Firefox/firefox.exe",
-  //     "-p",
-  //     "default-release",
-  //     "Entertainment",
-  //   ]);
-  // }
+
   /* 
    *  Get Position
    */
@@ -112,6 +105,7 @@ Future<void> loadPreferences() async {
    */
   if (!prefs.containsKey('darkMode')) {
     prefs.setBool('darkMode', true);
+    darkMode = true;
   } else {
     darkMode = prefs.getBool('darkMode')!;
   }
@@ -145,14 +139,12 @@ Future<Size> getDimensionsV() async {
   Size tempSize;
   final prefs = await SharedPreferences.getInstance();
   dimensions = prefs.getStringList('dimensions');
-  tempSize = Size(double.parse(dimensions!.first),
-      (double.parse(dimensions.last) - 32) / 3 * 1 + 32);
+  tempSize =
+      Size(double.parse(dimensions!.first), (double.parse(dimensions.last) - 32) / 3 * 1 + 32);
   if (prefs.containsKey("browserProfiles")) {
     tempSize = Size(
         double.parse(dimensions.first),
-        (double.parse(dimensions.last) - 32) /
-                3 *
-                prefs.getStringList("browserProfiles")!.length +
+        (double.parse(dimensions.last) - 32) / 3 * prefs.getStringList("browserProfiles")!.length +
             32);
   }
   return tempSize;
@@ -169,10 +161,7 @@ Future<Size> getDimensionsH() async {
   );
   if (prefs.containsKey("browserProfiles")) {
     tempSize = Size(
-        double.parse(dimensions.last) *
-            1.2 /
-            3 *
-            prefs.getStringList("browserProfiles")!.length,
+        double.parse(dimensions.last) * 1.2 / 3 * prefs.getStringList("browserProfiles")!.length,
         double.parse(dimensions.first) + 32);
   }
   return tempSize;
@@ -185,7 +174,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return FluentApp(
       title: 'Profile Switcher',
-      theme: ThemeData(
+      theme: FluentThemeData(
         accentColor: accentColor,
         brightness: darkMode! ? Brightness.dark : Brightness.light,
       ),

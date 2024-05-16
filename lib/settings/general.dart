@@ -10,20 +10,11 @@ class SettingsGeneral extends StatefulWidget {
   const SettingsGeneral({Key? key, required this.darkMode}) : super(key: key);
 
   @override
-  State<SettingsGeneral> createState() =>
-      _SettingsGeneralState(darkMode: darkMode);
+  State<SettingsGeneral> createState() => _SettingsGeneralState(darkMode: darkMode);
 }
 
 class _SettingsGeneralState extends State<SettingsGeneral> {
-  List<String> colorList = const [
-    "red",
-    "orange",
-    "yellow",
-    "green",
-    "teal",
-    "Blue",
-    "purple"
-  ];
+  List<String> colorList = const ["red", "orange", "yellow", "green", "teal", "Blue", "purple"];
   String? colorListValue;
   String? settingsColor = '...';
 
@@ -37,7 +28,7 @@ class _SettingsGeneralState extends State<SettingsGeneral> {
 
   List<String> orientationList = const ["Vertical", "Horizontal"];
   String? orientationValue;
-  String? settingsOriantation = '...';
+  String? settingsOrientation = '...';
 
   List<String> themeList = const ["Light", "Dark"];
   String? themeValue;
@@ -98,13 +89,11 @@ class _SettingsGeneralState extends State<SettingsGeneral> {
     return ScaffoldPage.scrollable(
       children: [
         Card(
-          backgroundColor: darkMode
-              ? const Color.fromARGB(255, 27, 27, 27)
-              : const Color.fromARGB(255, 245, 245, 245),
+          backgroundColor: darkMode ? const Color.fromARGB(255, 27, 27, 27) : const Color.fromARGB(255, 245, 245, 245),
           child: Row(
             children: [
               const Expanded(
-                child: Text("Change the accent color"),
+                child: Text("Accent color"),
               ),
               Expanded(
                 child: SizedBox(
@@ -124,8 +113,7 @@ class _SettingsGeneralState extends State<SettingsGeneral> {
                         setState(() => colorListValue = value);
                         final prefs = await SharedPreferences.getInstance();
                         prefs.setString('color', value);
-                        setState(
-                            () => settingsColor = prefs.getString('color'));
+                        setState(() => settingsColor = prefs.getString('color'));
                       }
                     },
                   ),
@@ -136,13 +124,11 @@ class _SettingsGeneralState extends State<SettingsGeneral> {
         ),
         const SizedBox(height: 15.0),
         Card(
-          backgroundColor: darkMode
-              ? const Color.fromARGB(255, 27, 27, 27)
-              : const Color.fromARGB(255, 245, 245, 245),
+          backgroundColor: darkMode ? const Color.fromARGB(255, 27, 27, 27) : const Color.fromARGB(255, 245, 245, 245),
           child: Row(
             children: [
               const Expanded(
-                child: Text("Change the position"),
+                child: Text("Position"),
               ),
               Expanded(
                 child: SizedBox(
@@ -222,19 +208,17 @@ class _SettingsGeneralState extends State<SettingsGeneral> {
         ),
         const SizedBox(height: 15.0),
         Card(
-          backgroundColor: darkMode
-              ? const Color.fromARGB(255, 27, 27, 27)
-              : const Color.fromARGB(255, 245, 245, 245),
+          backgroundColor: darkMode ? const Color.fromARGB(255, 27, 27, 27) : const Color.fromARGB(255, 245, 245, 245),
           child: Row(
             children: [
               const Expanded(
-                child: Text("Change the orientation"),
+                child: Text("Orientation"),
               ),
               Expanded(
                 child: SizedBox(
                   width: 200,
                   child: ComboBox<String>(
-                    placeholder: Text(settingsOriantation ?? 'Loading...'),
+                    placeholder: Text(settingsOrientation ?? 'Loading...'),
                     items: orientationList
                         .map((e) => ComboBoxItem<String>(
                               value: e,
@@ -252,11 +236,10 @@ class _SettingsGeneralState extends State<SettingsGeneral> {
                             prefs.setInt('orientation', m.Orientation.VERTICAL);
                             break;
                           case "Horizontal":
-                            prefs.setInt(
-                                'orientation', m.Orientation.HORIZONTAL);
+                            prefs.setInt('orientation', m.Orientation.HORIZONTAL);
                             break;
                         }
-                        setState(() => settingsOriantation = value);
+                        setState(() => settingsOrientation = value);
                       }
                     },
                   ),
@@ -267,13 +250,11 @@ class _SettingsGeneralState extends State<SettingsGeneral> {
         ),
         const SizedBox(height: 15.0),
         Card(
-          backgroundColor: darkMode
-              ? const Color.fromARGB(255, 27, 27, 27)
-              : const Color.fromARGB(255, 245, 245, 245),
+          backgroundColor: darkMode ? const Color.fromARGB(255, 27, 27, 27) : const Color.fromARGB(255, 245, 245, 245),
           child: Row(
             children: [
               const Expanded(
-                child: Text("Change the theme"),
+                child: Text("Theme"),
               ),
               Expanded(
                 child: SizedBox(
