@@ -5,15 +5,14 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:uuid/uuid.dart';
 
 class SettingsAddProfile extends StatefulWidget {
   final bool darkMode;
-  const SettingsAddProfile({Key? key, required this.darkMode})
-      : super(key: key);
+  const SettingsAddProfile({Key? key, required this.darkMode}) : super(key: key);
 
   @override
-  State<SettingsAddProfile> createState() =>
-      _SettingsAddProfileState(darkMode: darkMode);
+  State<SettingsAddProfile> createState() => _SettingsAddProfileState(darkMode: darkMode);
 }
 
 class _SettingsAddProfileState extends State<SettingsAddProfile> {
@@ -48,8 +47,7 @@ class _SettingsAddProfileState extends State<SettingsAddProfile> {
   @override
   _SettingsAddProfileState({required this.darkMode});
 
-  void showContentDialog(BuildContext context, String error,
-      {bool iserror = true}) async {
+  void showContentDialog(BuildContext context, String error, {bool iserror = true}) async {
     resultdialog = await showDialog<String>(
       context: context,
       builder: (context) => ContentDialog(
@@ -79,8 +77,7 @@ class _SettingsAddProfileState extends State<SettingsAddProfile> {
         binloc.isEmpty ||
         displayName.isEmpty) {
       if (!(binloc.endsWith(".exe") || binloc.endsWith(".app"))) {
-        showContentDialog(
-            context, "Browser binary location must end with .exe or .app");
+        showContentDialog(context, "Browser binary location must end with .exe or .app");
         return;
       }
       showContentDialog(context, "Please fill out all fields");
@@ -94,13 +91,14 @@ class _SettingsAddProfileState extends State<SettingsAddProfile> {
 
     final prefs = await SharedPreferences.getInstance();
 
-    if (prefs.containsKey(profileName)) {
-      showContentDialog(context, "Profile name already exists");
-      return;
-    }
+    // Generate a unique id for the profile
+    final id = Uuid().v4();
+
     var listTemp = prefs.getStringList('browserProfiles') ?? [];
-    listTemp.add(profileName);
+
+    listTemp.add(id);
     prefs.setStringList('browserProfiles', listTemp);
+
     var par2 = "";
     switch (browserComboBoxValue) {
       case "Chrome":
@@ -119,7 +117,7 @@ class _SettingsAddProfileState extends State<SettingsAddProfile> {
         par2 = "-p";
         break;
     }
-    prefs.setStringList(profileName, [
+    prefs.setStringList(id, [
       iconComboBoxValue!,
       "80",
       binloc,
@@ -177,8 +175,7 @@ class _SettingsAddProfileState extends State<SettingsAddProfile> {
                         const SizedBox(width: 40.0, child: Text("Icon:")),
                         Expanded(
                           child: ComboBox<String>(
-                            placeholder:
-                                Text(iconChoose ?? 'Choose an icon...'),
+                            placeholder: Text(iconChoose ?? 'Choose an icon...'),
                             items: iconValues
                                 .map((e) => ComboBoxItem<String>(
                                       value: e,
@@ -211,8 +208,7 @@ class _SettingsAddProfileState extends State<SettingsAddProfile> {
                         const SizedBox(width: 40.0, child: Text("Type:")),
                         Expanded(
                           child: ComboBox<String>(
-                            placeholder:
-                                Text(browserChoose ?? 'Choose a browser...'),
+                            placeholder: Text(browserChoose ?? 'Choose a browser...'),
                             items: browserValues
                                 .map((e) => ComboBoxItem<String>(
                                       value: e,
@@ -246,8 +242,7 @@ class _SettingsAddProfileState extends State<SettingsAddProfile> {
                                 } else if (Platform.isLinux) {
                                   fext = '*';
                                 }
-                                FilePickerResult? result =
-                                    await FilePicker.platform.pickFiles(
+                                FilePickerResult? result = await FilePicker.platform.pickFiles(
                                   type: FileType.custom,
                                   allowedExtensions: [fext],
                                 );
