@@ -93,7 +93,34 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Future<void> removeItem(String id) async {
-    // not tested
+    final delete = await showDialog<bool>(
+      context: context,
+      builder: (context) => ContentDialog(
+        title: const Text("Are you sure you want to remove this profile?"),
+        content: const Text(
+          "This action cannot be undone. You will have to re-add the profile manually.",
+        ),
+        actions: [
+          Button(
+            onPressed: () {
+              Navigator.pop(context, false);
+            },
+            child: const Text('Cancel'),
+          ),
+          Button(
+            onPressed: () {
+              Navigator.pop(context, true);
+            },
+            child: const Text('Remove'),
+          ),
+        ],
+      ),
+    );
+
+    if (delete == null || !delete) {
+      return;
+    }
+
     final prefs = await SharedPreferences.getInstance();
     final browserProfiles = prefs.getStringList('browserProfiles') ?? [];
     browserProfiles.remove(id);
