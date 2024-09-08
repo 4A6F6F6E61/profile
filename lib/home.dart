@@ -25,9 +25,10 @@ class _MyHomePageState extends State<MyHomePage> {
   InterfaceBrightness brightness =
       Platform.isMacOS ? InterfaceBrightness.auto : InterfaceBrightness.dark;
   List<String>? dimensions;
-  List<String> browserProfiles = [];
-  List<List<String>> browserItemStrings = [];
-  List<Widget> items = [];
+
+  Map<String, BrowserItemStruct> items = {};
+
+  List<Widget> widgetItems = [];
 
   @override
   void initState() {
@@ -36,32 +37,28 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Future<void> load() async {
-    await getBrowserStrings();
-    await getBrowserItemStrings();
-    if (browserItemStrings.isNotEmpty) {
-      for (List<String> bis in browserItemStrings) {
-        items.add(generateBrowserItem(bis[0], bis[1], bis[2], bis[3], bis[4], bis[5]));
+    final prefs = await SharedPreferences.getInstance();
+    final browserProfiles = prefs.getStringList('browserProfiles') ?? [];
+
+    if (browserProfiles.isNotEmpty) {
+      for (String browserProfile in browserProfiles) {
+        var profileStringList = prefs.getStringList(browserProfile)!;
+
+        items[browserProfile] = BrowserItemStruct.fromStringList(profileStringList);
       }
+    }
+
+    if (items.isNotEmpty) {
+      items.forEach((id, item) {
+        widgetItems.add(generateBrowserItem(id, item));
+      });
     }
     await setDimensions();
   }
 
-  Future<void> getBrowserItemStrings() async {
-    final prefs = await SharedPreferences.getInstance();
-    if (browserProfiles.isNotEmpty) {
-      for (String browserProfile in browserProfiles) {
-        var profile = prefs.getStringList(browserProfile)!;
-        setState(() {
-          browserItemStrings.add(profile);
-        });
-      }
-    }
-  }
-
-  BrowserItem generateBrowserItem(String iconName, String iconSize, String browserBinLoc,
-      String arg1, String arg2, String text) {
+  BrowserItemWidget generateBrowserItem(String id, BrowserItemStruct item) {
     IconData icon = FluentIcons.cat;
-    switch (iconName) {
+    switch (item.iconString) {
       case "Cat":
         icon = FluentIcons.cat;
         break;
@@ -75,25 +72,21 @@ class _MyHomePageState extends State<MyHomePage> {
         icon = FluentIcons.cat;
         break;
     }
-    return BrowserItem(
+    return BrowserItemWidget(
       icon: Icon(
         icon,
-        size: double.parse(iconSize),
+        size: double.parse(item.iconSize),
         color: Colors.white,
       ),
       onPressed: () => openBrowser(
-        browserBinLoc,
-        [arg1, arg2],
+        item.browserBinLoc,
+        [item.arg1, item.arg2],
       ),
-      text: text,
+      onRemove: () {},
+      text: item.profileName,
       fontSize: 16,
       textColor: Colors.white,
     );
-  }
-
-  Future<void> getBrowserStrings() async {
-    final prefs = await SharedPreferences.getInstance();
-    browserProfiles = prefs.getStringList('browserProfiles') ?? [];
   }
 
   Future<void> setDimensions() async {
@@ -104,15 +97,15 @@ class _MyHomePageState extends State<MyHomePage> {
     if (orientation == main.Orientation.VERTICAL) {
       appWindow.size = Size(
           double.parse(dimensions!.first) + 20, (double.parse(dimensions!.last) - 32) / 3 * 1 + 32);
-      if (items.isNotEmpty) {
+      if (widgetItems.isNotEmpty) {
         appWindow.size = Size(double.parse(dimensions!.first),
-            (double.parse(dimensions!.last) - 32) / 3 * items.length + 32);
+            (double.parse(dimensions!.last) - 32) / 3 * widgetItems.length + 32);
       }
     } else {
       appWindow.size =
           Size((double.parse(dimensions!.last)) / 3 * 1 + 32, double.parse(dimensions!.first));
-      if (items.isNotEmpty) {
-        appWindow.size = Size((double.parse(dimensions!.last)) / 3 * items.length + 32,
+      if (widgetItems.isNotEmpty) {
+        appWindow.size = Size((double.parse(dimensions!.last)) / 3 * widgetItems.length + 32,
             double.parse(dimensions!.first));
       }
     }
@@ -129,7 +122,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: items,
+            children: widgetItems,
           ),
         ],
       );
@@ -142,7 +135,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: items,
+            children: widgetItems,
           ),
         ],
       );
