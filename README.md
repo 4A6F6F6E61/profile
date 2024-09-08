@@ -13,4 +13,4 @@ It supports all major browsers like Firefox, Chrome, Edge etc.
 
 ## Downloads
 
-You can download all major versions [here](https://github.com/4A6F6F6E61/profile/tags).
+You can download all major versions [here](https://github.com/4A6F6F6E61/profile/releases).
