@@ -4,6 +4,7 @@ import 'package:fluent_ui/fluent_ui.dart';
 
 class BrowserItem extends StatelessWidget {
   final VoidCallback onPressed;
+  final VoidCallback onRemove;
   final Icon icon;
   final String text;
   final double? fontSize;
@@ -12,6 +13,7 @@ class BrowserItem extends StatelessWidget {
   const BrowserItem({
     Key? key,
     required this.onPressed,
+    required this.onRemove,
     required this.icon,
     required this.text,
     this.fontSize,
@@ -29,7 +31,7 @@ class BrowserItem extends StatelessWidget {
             children: [
               IconButton(
                 icon: icon,
-                onPressed: () => onPressed(),
+                onPressed: onPressed,
               ),
               Text(
                 text,
@@ -43,7 +45,7 @@ class BrowserItem extends StatelessWidget {
           top: 0,
           child: IconButton(
             icon: const Icon(FluentIcons.delete),
-            onPressed: () {},
+            onPressed: onRemove,
           ),
         ),
       ],
