@@ -38,66 +38,77 @@ class _SettingsNavState extends State<SettingsNav> {
 
   @override
   Widget build(BuildContext context) {
-    return NavigationView(
-      appBar: NavigationAppBar(
-        backgroundColor: Colors.transparent,
-        // height: !kIsWeb ? appWindow.titleBarHeight : 31.0,
-        title: () {
-          return MoveWindow(
-            child: const Align(
-              alignment: Alignment.centerLeft,
-              child: Text("Settings"),
+    return PopScope(
+      canPop: false,
+      onPopInvoked: (bool _) {
+        Navigator.popUntil(context, (route) {
+          if (route.settings.name == "/settings") {
+            Navigator.of(context).pushNamed("/");
+          }
+          return true;
+        });
+      },
+      child: NavigationView(
+        appBar: NavigationAppBar(
+          backgroundColor: Colors.transparent,
+          // height: !kIsWeb ? appWindow.titleBarHeight : 31.0,
+          title: () {
+            return MoveWindow(
+              child: const Align(
+                alignment: Alignment.centerLeft,
+                child: Text("Settings"),
+              ),
+            );
+          }(),
+          actions: MoveWindow(
+            child: const Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Spacer(),
+                TitleBarButtons(brightness: InterfaceBrightness.dark),
+              ],
             ),
-          );
-        }(),
-        actions: MoveWindow(
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: const [
-              Spacer(),
-              TitleBarButtons(brightness: InterfaceBrightness.dark)
-            ],
           ),
         ),
-      ),
-      pane: NavigationPane(
-        selected: index,
-        onChanged: (i) => setState(() => index = i),
-        size: const NavigationPaneSize(
-          openWidth: 250,
+        pane: NavigationPane(
+          selected: index,
+          onChanged: (i) => setState(() => index = i),
+          size: const NavigationPaneSize(
+            openWidth: 250,
+          ),
+          header: Container(
+            height: kOneLineTileHeight,
+            padding: const EdgeInsets.symmetric(horizontal: 10.0),
+            child: const FlutterLogo(
+              style: FlutterLogoStyle.horizontal,
+              size: 100,
+            ),
+          ),
+          displayMode: PaneDisplayMode.open,
+          items: [
+            PaneItemSeparator(),
+            PaneItem(
+              icon: const Icon(FluentIcons.settings),
+              title: const Text('General'),
+              body: SettingsGeneral(darkMode: darkMode),
+            ),
+            PaneItem(
+              icon: const Icon(FluentIcons.add),
+              title: const Text('Add Browser Profile'),
+              body: SettingsAddProfile(darkMode: darkMode),
+            ),
+            PaneItem(
+              icon: const Icon(FluentIcons.library),
+              title: const Text('Licenses'),
+              body: SettingsLicenses(darkMode: darkMode),
+            ),
+            PaneItem(
+              icon: const Icon(FluentIcons.info),
+              title: const Text('About'),
+              body: const SettingsAbout(),
+            ),
+          ],
         ),
-        header: Container(
-          height: kOneLineTileHeight,
-          padding: const EdgeInsets.symmetric(horizontal: 10.0),
-          child: const FlutterLogo(
-            style: FlutterLogoStyle.horizontal,
-            size: 100,
-          ),
-        ),
-        displayMode: PaneDisplayMode.open,
-        items: [
-          PaneItemSeparator(),
-          PaneItem(
-            icon: const Icon(FluentIcons.settings),
-            title: const Text('General'),
-            body: SettingsGeneral(darkMode: darkMode),
-          ),
-          PaneItem(
-            icon: const Icon(FluentIcons.add),
-            title: const Text('Add Browser Profile'),
-            body: SettingsAddProfile(darkMode: darkMode),
-          ),
-          PaneItem(
-            icon: const Icon(FluentIcons.library),
-            title: const Text('Licenses'),
-            body: SettingsLicenses(darkMode: darkMode),
-          ),
-          PaneItem(
-            icon: const Icon(FluentIcons.info),
-            title: const Text('About'),
-            body: const SettingsAbout(),
-          ),
-        ],
       ),
     );
   }
