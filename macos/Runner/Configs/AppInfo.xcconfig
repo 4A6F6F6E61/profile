@@ -8,7 +8,7 @@
 PRODUCT_NAME = browser_manager
 
 // The application's bundle identifier
-PRODUCT_BUNDLE_IDENTIFIER = com.example.browserManager
+PRODUCT_BUNDLE_IDENTIFIER = com.4A6F6F6E61.browserManager
 
 // The copyright displayed in application information
-PRODUCT_COPYRIGHT = Copyright © 2023 com.example. All rights reserved.
+PRODUCT_COPYRIGHT = Copyright © 2023 com.4A6F6F6E61. All rights reserved.
