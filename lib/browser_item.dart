@@ -1,8 +1,6 @@
-import 'dart:developer';
-
 import 'package:fluent_ui/fluent_ui.dart';
 
-class BrowserItemStruct {
+class BrowserItem {
   // The name of the icon
   final String iconString;
   // The size of the icon
@@ -16,7 +14,7 @@ class BrowserItemStruct {
   // The Name Displayed in the App
   final String profileName;
 
-  BrowserItemStruct({
+  BrowserItem({
     required this.iconString,
     required this.iconSize,
     required this.browserBinLoc,
@@ -25,8 +23,8 @@ class BrowserItemStruct {
     required this.profileName,
   });
 
-  factory BrowserItemStruct.fromStringList(List<String> list) {
-    return BrowserItemStruct(
+  factory BrowserItem.fromStringList(List<String> list) {
+    return BrowserItem(
       iconString: list[0],
       iconSize: list[1],
       browserBinLoc: list[2],

@@ -26,7 +26,7 @@ class _MyHomePageState extends State<MyHomePage> {
       Platform.isMacOS ? InterfaceBrightness.auto : InterfaceBrightness.dark;
   List<String>? dimensions;
 
-  Map<String, BrowserItemStruct> items = {};
+  Map<String, BrowserItem> items = {};
 
   List<Widget> widgetItems = [];
 
@@ -44,7 +44,7 @@ class _MyHomePageState extends State<MyHomePage> {
       for (String browserProfile in browserProfiles) {
         var profileStringList = prefs.getStringList(browserProfile)!;
 
-        items[browserProfile] = BrowserItemStruct.fromStringList(profileStringList);
+        items[browserProfile] = BrowserItem.fromStringList(profileStringList);
       }
     }
 
@@ -56,7 +56,7 @@ class _MyHomePageState extends State<MyHomePage> {
     await setDimensions();
   }
 
-  BrowserItemWidget generateBrowserItem(String id, BrowserItemStruct item) {
+  BrowserItemWidget generateBrowserItem(String id, BrowserItem item) {
     IconData icon = FluentIcons.cat;
     switch (item.iconString) {
       case "Cat":
@@ -73,6 +73,7 @@ class _MyHomePageState extends State<MyHomePage> {
         break;
     }
     return BrowserItemWidget(
+      key: Key(id),
       icon: Icon(
         icon,
         size: double.parse(item.iconSize),
@@ -82,11 +83,25 @@ class _MyHomePageState extends State<MyHomePage> {
         item.browserBinLoc,
         [item.arg1, item.arg2],
       ),
-      onRemove: () {},
+      onRemove: () => removeItem(id),
       text: item.profileName,
       fontSize: 16,
       textColor: Colors.white,
     );
+  }
+
+  Future<void> removeItem(String id) async {
+    // not tested
+    final prefs = await SharedPreferences.getInstance();
+    final browserProfiles = prefs.getStringList('browserProfiles') ?? [];
+    browserProfiles.remove(id);
+    prefs.setStringList('browserProfiles', browserProfiles);
+
+    prefs.remove(id);
+    items.remove(id);
+
+    widgetItems.removeWhere((element) => element.key == Key(id));
+    await setDimensions();
   }
 
   Future<void> setDimensions() async {
@@ -95,19 +110,9 @@ class _MyHomePageState extends State<MyHomePage> {
       dimensions = prefs.getStringList('dimensions');
     });
     if (orientation == main.Orientation.VERTICAL) {
-      appWindow.size = Size(
-          double.parse(dimensions!.first) + 20, (double.parse(dimensions!.last) - 32) / 3 * 1 + 32);
-      if (widgetItems.isNotEmpty) {
-        appWindow.size = Size(double.parse(dimensions!.first),
-            (double.parse(dimensions!.last) - 32) / 3 * widgetItems.length + 32);
-      }
+      appWindow.size = await main.getDimensionsV();
     } else {
-      appWindow.size =
-          Size((double.parse(dimensions!.last)) / 3 * 1 + 32, double.parse(dimensions!.first));
-      if (widgetItems.isNotEmpty) {
-        appWindow.size = Size((double.parse(dimensions!.last)) / 3 * widgetItems.length + 32,
-            double.parse(dimensions!.first));
-      }
+      appWindow.size = await main.getDimensionsH();
     }
   }
 

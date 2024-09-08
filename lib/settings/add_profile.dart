@@ -92,7 +92,7 @@ class _SettingsAddProfileState extends State<SettingsAddProfile> {
     final prefs = await SharedPreferences.getInstance();
 
     // Generate a unique id for the profile
-    final id = Uuid().v4();
+    final id = const Uuid().v4();
 
     var listTemp = prefs.getStringList('browserProfiles') ?? [];
 
