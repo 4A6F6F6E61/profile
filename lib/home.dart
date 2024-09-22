@@ -3,6 +3,7 @@
 import 'dart:developer';
 
 import 'package:bitsdojo_window/bitsdojo_window.dart';
+import 'package:browser_manager/global.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'interface_brightness.dart';
@@ -74,6 +75,7 @@ class _MyHomePageState extends State<MyHomePage> {
         icon = FluentIcons.cat;
         break;
     }
+
     return BrowserItemWidget(
       key: Key(id),
       icon: Icon(
@@ -93,28 +95,10 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Future<void> removeItem(String id) async {
-    final delete = await showDialog<bool>(
-      context: context,
-      builder: (context) => ContentDialog(
-        title: const Text("Are you sure you want to remove this profile?"),
-        content: const Text(
-          "This action cannot be undone. You will have to re-add the profile manually.",
-        ),
-        actions: [
-          Button(
-            onPressed: () {
-              Navigator.pop(context, false);
-            },
-            child: const Text('Cancel'),
-          ),
-          Button(
-            onPressed: () {
-              Navigator.pop(context, true);
-            },
-            child: const Text('Remove'),
-          ),
-        ],
-      ),
+    final delete = await showMessageBox(
+      context,
+      "Are you sure you want to remove this profile?",
+      "This action cannot be undone. You will have to re-add the profile manually.",
     );
 
     if (delete == null || !delete) {
