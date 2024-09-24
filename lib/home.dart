@@ -1,7 +1,5 @@
 // ignore_for_file: no_logic_in_create_state
 
-import 'dart:developer';
-
 import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:browser_manager/global.dart';
 import 'package:fluent_ui/fluent_ui.dart';
@@ -31,7 +29,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Map<String, BrowserItem> items = {};
 
-  List<Widget> widgetItems = [];
+  List<BrowserItemWidget> widgetItems = [];
 
   @override
   void initState() {

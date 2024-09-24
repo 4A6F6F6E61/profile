@@ -1,4 +1,7 @@
 {
     "cmake.configureOnOpen": false,
-    "cmake.sourceDirectory": "${workspaceFolder}/windows/runner"
+    "cmake.sourceDirectory": "${workspaceFolder}/windows/runner",
+    "cSpell.words": [
+        "bitsdojo"
+    ]
 }
