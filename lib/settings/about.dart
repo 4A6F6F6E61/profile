@@ -15,9 +15,9 @@ class SettingsAbout extends StatelessWidget {
             child: Container(
               width: double.infinity,
               margin: const EdgeInsets.all(10.0),
-              child: Column(
+              child: const Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: const [
+                children: [
                   Text(
                     "Browser Profile Manager",
                     style: TextStyle(
@@ -28,8 +28,7 @@ class SettingsAbout extends StatelessWidget {
                   SizedBox(
                     height: 10,
                   ),
-                  Text(
-                      "Simple Browser Profile Manager build with Flutter by Joona Brückner"),
+                  Text("Simple Browser Profile Manager build with Flutter by Joona Brückner"),
                   SizedBox(
                     height: 10,
                   )

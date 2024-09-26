@@ -2,6 +2,8 @@
     "cmake.configureOnOpen": false,
     "cmake.sourceDirectory": "${workspaceFolder}/windows/runner",
     "cSpell.words": [
-        "bitsdojo"
+        "bitsdojo",
+        "Brückner",
+        "Joona"
     ]
 }
