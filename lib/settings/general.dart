@@ -89,34 +89,34 @@ class _SettingsGeneralState extends State<SettingsGeneral> {
     return ScaffoldPage.scrollable(
       children: [
         Card(
-          backgroundColor: darkMode ? const Color.fromARGB(255, 27, 27, 27) : const Color.fromARGB(255, 245, 245, 245),
+          backgroundColor: darkMode
+              ? const Color.fromARGB(255, 27, 27, 27)
+              : const Color.fromARGB(255, 245, 245, 245),
           child: Row(
             children: [
               const Expanded(
                 child: Text("Accent color"),
               ),
-              Expanded(
-                child: SizedBox(
-                  width: 200,
-                  child: ComboBox<String>(
-                    placeholder: Text(settingsColor ?? 'Loading...'),
-                    items: colorList
-                        .map((e) => ComboBoxItem<String>(
-                              value: e,
-                              child: Text(e),
-                            ))
-                        .toList(),
-                    value: colorListValue,
-                    onChanged: (value) async {
-                      // print(value);
-                      if (value != null) {
-                        setState(() => colorListValue = value);
-                        final prefs = await SharedPreferences.getInstance();
-                        prefs.setString('color', value);
-                        setState(() => settingsColor = prefs.getString('color'));
-                      }
-                    },
-                  ),
+              SizedBox(
+                width: 300,
+                child: ComboBox<String>(
+                  placeholder: Text(settingsColor ?? 'Loading...'),
+                  items: colorList
+                      .map((e) => ComboBoxItem<String>(
+                            value: e,
+                            child: Text(e),
+                          ))
+                      .toList(),
+                  value: colorListValue,
+                  onChanged: (value) async {
+                    // print(value);
+                    if (value != null) {
+                      setState(() => colorListValue = value);
+                      final prefs = await SharedPreferences.getInstance();
+                      prefs.setString('color', value);
+                      setState(() => settingsColor = prefs.getString('color'));
+                    }
+                  },
                 ),
               ),
             ],
@@ -124,83 +124,87 @@ class _SettingsGeneralState extends State<SettingsGeneral> {
         ),
         const SizedBox(height: 15.0),
         Card(
-          backgroundColor: darkMode ? const Color.fromARGB(255, 27, 27, 27) : const Color.fromARGB(255, 245, 245, 245),
+          backgroundColor: darkMode
+              ? const Color.fromARGB(255, 27, 27, 27)
+              : const Color.fromARGB(255, 245, 245, 245),
           child: Row(
             children: [
               const Expanded(
                 child: Text("Position"),
               ),
-              Expanded(
-                child: SizedBox(
-                  width: 200,
-                  child: ComboBox<String>(
-                    placeholder: Text(settingsPositionY ?? 'Loading...'),
-                    items: positionYList
-                        .map((e) => ComboBoxItem<String>(
-                              value: e,
-                              child: Text(e),
-                            ))
-                        .toList(),
-                    value: positionYValue,
-                    onChanged: (value) async {
-                      // print(value);
-                      if (value != null) {
-                        setState(() => positionYValue = value);
-                        final prefs = await SharedPreferences.getInstance();
-                        var pos = prefs.getStringList('position');
-                        switch (value) {
-                          case "top":
-                            pos![1] = "-1.0";
-                            break;
-                          case "center":
-                            pos![1] = "0.0";
-                            break;
-                          case "bottom":
-                            pos![1] = "1.0";
-                            break;
-                        }
-                        prefs.setStringList('position', pos!);
-                        setState(() => settingsPositionY = value);
-                      }
-                    },
-                  ),
-                ),
-              ),
-              const SizedBox(width: 10),
-              Expanded(
-                child: SizedBox(
-                  width: 200,
-                  child: ComboBox<String>(
-                    placeholder: Text(settingsPositionX ?? 'Loading...'),
-                    items: positionXList
-                        .map((e) => ComboBoxItem<String>(
-                              value: e,
-                              child: Text(e),
-                            ))
-                        .toList(),
-                    value: positionXValue,
-                    onChanged: (value) async {
-                      // print(value);
-                      if (value != null) {
-                        setState(() => positionXValue = value);
-                        final prefs = await SharedPreferences.getInstance();
-                        var pos = prefs.getStringList('position');
-                        switch (value) {
-                          case "left":
-                            pos![0] = "-1.0";
-                            break;
-                          case "center":
-                            pos![0] = "0.0";
-                            break;
-                          case "right":
-                            pos![0] = "1.0";
-                            break;
-                        }
-                        prefs.setStringList('position', pos!);
-                        setState(() => settingsPositionX = value);
-                      }
-                    },
-                  ),
+              SizedBox(
+                width: 300,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Expanded(
+                      child: ComboBox<String>(
+                        placeholder: Text(settingsPositionY ?? 'Loading...'),
+                        items: positionYList
+                            .map((e) => ComboBoxItem<String>(
+                                  value: e,
+                                  child: Text(e),
+                                ))
+                            .toList(),
+                        value: positionYValue,
+                        onChanged: (value) async {
+                          // print(value);
+                          if (value != null) {
+                            setState(() => positionYValue = value);
+                            final prefs = await SharedPreferences.getInstance();
+                            var pos = prefs.getStringList('position');
+                            switch (value) {
+                              case "top":
+                                pos![1] = "-1.0";
+                                break;
+                              case "center":
+                                pos![1] = "0.0";
+                                break;
+                              case "bottom":
+                                pos![1] = "1.0";
+                                break;
+                            }
+                            prefs.setStringList('position', pos!);
+                            setState(() => settingsPositionY = value);
+                          }
+                        },
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: ComboBox<String>(
+                        placeholder: Text(settingsPositionX ?? 'Loading...'),
+                        items: positionXList
+                            .map((e) => ComboBoxItem<String>(
+                                  value: e,
+                                  child: Text(e),
+                                ))
+                            .toList(),
+                        value: positionXValue,
+                        onChanged: (value) async {
+                          // print(value);
+                          if (value != null) {
+                            setState(() => positionXValue = value);
+                            final prefs = await SharedPreferences.getInstance();
+                            var pos = prefs.getStringList('position');
+                            switch (value) {
+                              case "left":
+                                pos![0] = "-1.0";
+                                break;
+                              case "center":
+                                pos![0] = "0.0";
+                                break;
+                              case "right":
+                                pos![0] = "1.0";
+                                break;
+                            }
+                            prefs.setStringList('position', pos!);
+                            setState(() => settingsPositionX = value);
+                          }
+                        },
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ],
@@ -208,41 +212,41 @@ class _SettingsGeneralState extends State<SettingsGeneral> {
         ),
         const SizedBox(height: 15.0),
         Card(
-          backgroundColor: darkMode ? const Color.fromARGB(255, 27, 27, 27) : const Color.fromARGB(255, 245, 245, 245),
+          backgroundColor: darkMode
+              ? const Color.fromARGB(255, 27, 27, 27)
+              : const Color.fromARGB(255, 245, 245, 245),
           child: Row(
             children: [
               const Expanded(
                 child: Text("Orientation"),
               ),
-              Expanded(
-                child: SizedBox(
-                  width: 200,
-                  child: ComboBox<String>(
-                    placeholder: Text(settingsOrientation ?? 'Loading...'),
-                    items: orientationList
-                        .map((e) => ComboBoxItem<String>(
-                              value: e,
-                              child: Text(e),
-                            ))
-                        .toList(),
-                    value: orientationValue,
-                    onChanged: (value) async {
-                      // print(value);
-                      if (value != null) {
-                        setState(() => orientationValue = value);
-                        final prefs = await SharedPreferences.getInstance();
-                        switch (value) {
-                          case "Vertical":
-                            prefs.setInt('orientation', m.Orientation.VERTICAL);
-                            break;
-                          case "Horizontal":
-                            prefs.setInt('orientation', m.Orientation.HORIZONTAL);
-                            break;
-                        }
-                        setState(() => settingsOrientation = value);
+              SizedBox(
+                width: 300,
+                child: ComboBox<String>(
+                  placeholder: Text(settingsOrientation ?? 'Loading...'),
+                  items: orientationList
+                      .map((e) => ComboBoxItem<String>(
+                            value: e,
+                            child: Text(e),
+                          ))
+                      .toList(),
+                  value: orientationValue,
+                  onChanged: (value) async {
+                    // print(value);
+                    if (value != null) {
+                      setState(() => orientationValue = value);
+                      final prefs = await SharedPreferences.getInstance();
+                      switch (value) {
+                        case "Vertical":
+                          prefs.setInt('orientation', m.Orientation.VERTICAL);
+                          break;
+                        case "Horizontal":
+                          prefs.setInt('orientation', m.Orientation.HORIZONTAL);
+                          break;
                       }
-                    },
-                  ),
+                      setState(() => settingsOrientation = value);
+                    }
+                  },
                 ),
               ),
             ],
@@ -250,38 +254,38 @@ class _SettingsGeneralState extends State<SettingsGeneral> {
         ),
         const SizedBox(height: 15.0),
         Card(
-          backgroundColor: darkMode ? const Color.fromARGB(255, 27, 27, 27) : const Color.fromARGB(255, 245, 245, 245),
+          backgroundColor: darkMode
+              ? const Color.fromARGB(255, 27, 27, 27)
+              : const Color.fromARGB(255, 245, 245, 245),
           child: Row(
             children: [
               const Expanded(
                 child: Text("Theme"),
               ),
-              Expanded(
-                child: SizedBox(
-                  width: 200,
-                  child: ComboBox<String>(
-                    placeholder: Text(settingsTheme ?? 'Loading...'),
-                    items: themeList
-                        .map((e) => ComboBoxItem<String>(
-                              value: e,
-                              child: Text(e),
-                            ))
-                        .toList(),
-                    value: themeValue,
-                    onChanged: (value) async {
-                      // print(value);
-                      if (value != null) {
-                        setState(() => themeValue = value);
-                        final prefs = await SharedPreferences.getInstance();
-                        if (value == "Dark") {
-                          prefs.setBool('darkMode', true);
-                        } else {
-                          prefs.setBool('darkMode', false);
-                        }
-                        setState(() => settingsTheme = value);
+              SizedBox(
+                width: 300,
+                child: ComboBox<String>(
+                  placeholder: Text(settingsTheme ?? 'Loading...'),
+                  items: themeList
+                      .map((e) => ComboBoxItem<String>(
+                            value: e,
+                            child: Text(e),
+                          ))
+                      .toList(),
+                  value: themeValue,
+                  onChanged: (value) async {
+                    // print(value);
+                    if (value != null) {
+                      setState(() => themeValue = value);
+                      final prefs = await SharedPreferences.getInstance();
+                      if (value == "Dark") {
+                        prefs.setBool('darkMode', true);
+                      } else {
+                        prefs.setBool('darkMode', false);
                       }
-                    },
-                  ),
+                      setState(() => settingsTheme = value);
+                    }
+                  },
                 ),
               ),
             ],
